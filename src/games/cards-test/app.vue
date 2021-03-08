@@ -8,9 +8,10 @@
 
 import { io } from "socket.io-client";
 
-const socketProtocol = (window.location.protocol.includes('https')) ? 'wss' : 'ws';
-const socket = io(`${socketProtocol}://${window.location.host}`);
-socket.emit('join_game','my_name');
+const socket = io('http://localhost:3000');
+socket.on("connect", () => {
+  console.log(socket.id);
+});
 
 export default {
   name: 'CardsTest',
