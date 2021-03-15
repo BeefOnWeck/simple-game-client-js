@@ -1,11 +1,11 @@
 module.exports = {
   pages: {
-    cards_test: {
-      entry: 'src/games/cards-test/app.js',
+    tic_tac_toe: {
+      entry: 'src/games/tic-tac-toe/main.js',
       template: 'public/index.html',
-      title: 'Cards Test',
-      filename: "cards-test.html",
-      chunks: ['chunk-vendors', 'chunk-common', 'cards_test']
+      title: 'Tic Tac Toe',
+      filename: "tic-tac-toe.html",
+      chunks: ['chunk-vendors', 'chunk-common', 'tic_tac_toe']
     }
   }
 }

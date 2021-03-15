@@ -2,7 +2,7 @@
   <div>
     <form 
       id="login"
-      v-on:submit.prevent="login"
+      v-on:submit.prevent="login(socket)"
     >
       <label>Enter a user name:</label>
       <input id="name" type="text">
@@ -12,25 +12,25 @@
 </template>
 
 <script>
-// import { io } from "socket.io-client";
+import { inject } from 'vue';
 
 export default {
   name: 'Login',
   props: [],
-  data(){
-    return {
-    }
+  setup() {
+    const socket = inject('socket');
+    console.log(socket);
+    return {socket};
   },
   methods: {
-    login() {
-      console.log(this.$options);
-      this.socket.on('game-state', (state) => {
+    login(socket) {
+      socket.on('game-state', (state) => {
         console.log(state);
       });
-      this.socket.on('start-your-turn', () => {
+      socket.on('start-your-turn', () => {
         console.log('I am the active player!');
       });
-      this.socket.emit('send-user-name', this.name);
+      socket.emit('send-user-name', this.name);
     }
   }
 }

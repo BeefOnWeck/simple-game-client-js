@@ -2,7 +2,7 @@
   <div>
     <form 
       id="controls"
-      v-on:submit.prevent="endturn"
+      v-on:submit.prevent="endturn(socket)"
     >
       <input type="submit" value="End Turn">
     </form>
@@ -10,17 +10,19 @@
 </template>
 
 <script>
+import { inject } from 'vue';
 
 export default {
   name: 'Controls',
-  props: ['socket'],
-  data(){
-    return {
-    }
+  props: [],
+  setup() {
+    const socket = inject('socket');
+    console.log(socket);
+    return {socket};
   },
   methods: {
-    endturn() {
-      this.socket.emit('player-actions', {});
+    endturn(socket) {
+      socket.emit('player-actions', {});
       console.log('I am done');
     }
   }
