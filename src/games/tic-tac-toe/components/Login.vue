@@ -5,7 +5,7 @@
       v-on:submit.prevent="login(socket)"
     >
       <label>Enter a user name:</label>
-      <input id="name" type="text">
+      <input id="name" type="text" v-model="name">
       <input type="submit" value="Login">
     </form>
   </div>
@@ -22,6 +22,11 @@ export default {
     console.log(socket);
     return {socket};
   },
+  data() {
+    return {
+      name: null
+    };
+  },
   methods: {
     login(socket) {
       socket.on('game-state', (state) => {
@@ -30,6 +35,7 @@ export default {
       socket.on('start-your-turn', () => {
         console.log('I am the active player!');
       });
+      console.log(this);
       socket.emit('send-user-name', this.name);
     }
   }
