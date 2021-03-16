@@ -2,7 +2,7 @@
   <div id="app" v-if="isConnected">
     <h1>Tic-Tac-Toe</h1>
     <Login />
-    <Grid v-bind:board="board"/>
+    <Grid v-bind:board="board" v-bind:myMark="myMark"/>
     <Controls/>
   </div>
 </template>
@@ -27,7 +27,8 @@ export default {
     return {
       isConnected: false,
       myTurn: false,
-      board: Array.from({length:9}, () => '?')
+      board: Array.from({length:9}, () => '?'),
+      myMark: null
     }
   },
   setup() {
@@ -49,6 +50,8 @@ export default {
     socket.on('game-state', (state) => {
       // Board is dynamically bound to the Grid child component
       vc.board = state.state.grid.map(g => g.mark);
+      console.log(state);
+      vc.myMark = state.players.filter(p => p.id === socket.id)[0].mark;
     });
   },
   mounted() {

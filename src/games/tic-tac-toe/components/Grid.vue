@@ -43,7 +43,7 @@
 
 export default {
   name: 'Grid',
-  props: ['board'],
+  props: ['board', 'myMark'],
   setup() {
     // Inject stuff here
   },
@@ -57,7 +57,12 @@ export default {
     mark(event) {
       console.log(event);
       const t3Ind = parseInt(event.target.attributes[0].value, 10);
-      this.localBoard[t3Ind] = 'X';
+      if (this.localBoard[t3Ind] === null) {
+        this.localBoard[t3Ind] = this.myMark;
+      } else {
+        // TODO: Alert user that they can't change a space that is already marked.
+      }
+      
     }
   },
   updated() {
