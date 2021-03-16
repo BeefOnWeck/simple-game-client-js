@@ -17,7 +17,6 @@ export default {
   props: [],
   setup() {
     const socket = inject('socket');
-    console.log(socket);
     return {socket};
   },
   methods: {

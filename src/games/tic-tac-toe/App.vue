@@ -1,8 +1,8 @@
 <template>
-  <div id="app">
+  <div id="app" v-if="isConnected">
     <h1>Tic-Tac-Toe</h1>
-    <Login/>
-    <Grid/>
+    <Login />
+    <Grid v-bind:board="board"/>
     <Controls/>
   </div>
 </template>
@@ -11,6 +11,10 @@
 import Login from './components/Login.vue'
 import Grid from './components/Grid.vue'
 import Controls from './components/Controls.vue'
+import { provide } from 'vue'
+import { io } from 'socket.io-client'
+
+const socket = io('http://localhost:3000');
 
 export default {
   name: 'Tic-Tac-Toe',
@@ -18,6 +22,34 @@ export default {
     Login,
     Grid,
     Controls
+  },
+  data() {
+    return {
+      isConnected: false,
+      myTurn: false,
+      board: Array.from({length:9}, () => '?')
+    }
+  },
+  setup() {
+    // Injecting child components with the socket
+    // NOTE: Child components can use and modify the socket, but their changes
+    // won't be reflected here.
+    provide('socket', socket);
+  },
+  created() {
+    let vc = this;
+    socket.on('connect', function() {
+      console.log('Socket ID:', this.id);
+      vc.isConnected = true; // We don't render until the socket is connected
+    });
+    socket.on('start-your-turn', () => {
+      vc.myTurn = true;
+      console.log('I am the active player');
+    });
+    socket.on('game-state', (state) => {
+      // Board is dynamically bound to the Grid child component
+      vc.board = state.state.grid.map(g => g.mark);
+    });
   },
   mounted() {
     console.log(this);

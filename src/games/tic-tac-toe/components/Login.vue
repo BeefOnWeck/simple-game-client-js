@@ -19,7 +19,6 @@ export default {
   props: [],
   setup() {
     const socket = inject('socket');
-    console.log(socket);
     return {socket};
   },
   data() {
@@ -29,13 +28,7 @@ export default {
   },
   methods: {
     login(socket) {
-      socket.on('game-state', (state) => {
-        console.log(state);
-      });
-      socket.on('start-your-turn', () => {
-        console.log('I am the active player!');
-      });
-      console.log(this);
+      console.log('Sending user name:', this.name);
       socket.emit('send-user-name', this.name);
     }
   }
