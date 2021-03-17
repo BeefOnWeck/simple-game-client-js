@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     endturn(socket) {
-      socket.emit('player-actions', {});
+      socket.emit('end-my-turn', {});
       console.log('I am done');
     }
   }

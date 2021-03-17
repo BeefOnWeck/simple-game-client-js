@@ -3,35 +3,35 @@
     <caption></caption>
     <tbody>
       <tr>
-        <td t3Ind="0" @click="mark">
+        <td t3Ind="0" @click="mark(socket, $event)">
           {{localBoard[0]}}
         </td>
-        <td t3Ind="1" class="vert" @click="mark">
+        <td t3Ind="1" class="vert" @click="mark(socket, $event)">
           {{localBoard[1]}}
         </td>
-        <td t3Ind="2" @click="mark">
+        <td t3Ind="2" @click="mark(socket, $event)">
           {{localBoard[2]}}
         </td>
       </tr>
       <tr>
-        <td t3Ind="3" class="hori" @click="mark">
+        <td t3Ind="3" class="hori" @click="mark(socket, $event)">
           {{localBoard[3]}}
         </td>
-        <td t3Ind="4" class="hori vert" @click="mark">
+        <td t3Ind="4" class="hori vert" @click="mark(socket, $event)">
           {{localBoard[4]}}
         </td>
-        <td t3Ind="5" class="hori" @click="mark">
+        <td t3Ind="5" class="hori" @click="mark(socket, $event)">
           {{localBoard[5]}}
         </td>
       </tr>
       <tr>
-        <td t3Ind="6" @click="mark">
+        <td t3Ind="6" @click="mark(socket, $event)">
           {{localBoard[6]}}
         </td>
-        <td t3Ind="7" class="vert" @click="mark">
+        <td t3Ind="7" class="vert" @click="mark(socket, $event)">
           {{localBoard[7]}}
         </td>
-        <td t3Ind="8" @click="mark">
+        <td t3Ind="8" @click="mark(socket, $event)">
           {{localBoard[8]}}
         </td>
       </tr>
@@ -40,12 +40,14 @@
 </template>
 
 <script>
+import { inject } from 'vue';
 
 export default {
   name: 'Grid',
   props: ['board', 'myMark'],
   setup() {
-    // Inject stuff here
+    const socket = inject('socket');
+    return {socket};
   },
   data() {
     return {
@@ -54,15 +56,20 @@ export default {
     };
   },
   methods: {
-    mark(event) {
+    mark(socket, event) {
       console.log(event);
       const t3Ind = parseInt(event.target.attributes[0].value, 10);
       if (this.localBoard[t3Ind] === null) {
         this.localBoard[t3Ind] = this.myMark;
+        socket.emit('player-actions', {
+          'make-mark': {
+            ind: t3Ind, // TODO: Get row, col
+            pid: socket.id //this.myMark // TODO: Get player id instead
+          }
+        });
       } else {
         // TODO: Alert user that they can't change a space that is already marked.
       }
-      
     }
   },
   updated() {

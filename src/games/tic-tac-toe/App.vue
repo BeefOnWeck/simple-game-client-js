@@ -47,11 +47,11 @@ export default {
       vc.myTurn = true;
       console.log('I am the active player');
     });
-    socket.on('game-state', (state) => {
+    socket.on('game-state', (msg) => {
       // Board is dynamically bound to the Grid child component
-      vc.board = state.state.grid.map(g => g.mark);
-      console.log(state);
-      vc.myMark = state.players.filter(p => p.id === socket.id)[0].mark;
+      vc.board = msg.state.grid.map(g => g.mark);
+      // Grab the player's mark from the transmitted state
+      vc.myMark = msg.players.filter(p => p.id === socket.id)[0].mark;
     });
   },
   mounted() {
