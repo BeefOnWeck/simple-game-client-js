@@ -27,9 +27,11 @@ export default {
     };
   },
   methods: {
-    login(socket) {
+    login(socket) { // TODO: Disable after submitting
       console.log('Sending user name:', this.name);
-      socket.emit('send-user-name', this.name);
+      socket.emit('send-user-name', this.name, response => {
+        console.log(response.status);
+      });
     }
   }
 }

@@ -48,6 +48,7 @@ export default {
       console.log('I am the active player');
     });
     socket.on('game-state', (msg) => {
+      console.log(msg);
       // Board is dynamically bound to the Grid child component
       vc.board = msg.state.grid.map(g => g.mark);
       // Grab the player's mark from the transmitted state
