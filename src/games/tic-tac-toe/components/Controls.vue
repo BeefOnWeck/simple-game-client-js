@@ -21,8 +21,10 @@ export default {
   },
   methods: {
     endturn(socket) {
-      socket.emit('end-my-turn', {});
-      console.log('I am done');
+      console.log('Trying to end my turn.');
+      socket.emit('end-my-turn', {}, response => {
+        console.log(response.status);
+      });
     }
   }
 }

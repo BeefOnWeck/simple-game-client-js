@@ -63,9 +63,11 @@ export default {
         this.localBoard[t3Ind] = this.myMark;
         socket.emit('player-actions', {
           'make-mark': {
-            ind: t3Ind, // TODO: Get row, col
-            pid: socket.id //this.myMark // TODO: Get player id instead
+            ind: t3Ind,
+            pid: socket.id
           }
+        }, response => {
+          console.log(response.status);
         });
       } else {
         // TODO: Alert user that they can't change a space that is already marked.
