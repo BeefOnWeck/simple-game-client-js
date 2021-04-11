@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <div class="card" v-bind:class="{facedown:isFaceDown}">
     <div class="card-topleft">
       <div class="card-corner-rank">
        {{rank}}
@@ -25,9 +25,17 @@ export default {
   name: 'Card',
   props: ['rank', 'suit'],
   setup() {
-
+    
+    
   },
   data() {
+
+    const faceDown = this.rank == null && this.suit == null;
+    
+    return {
+      isFaceDown: faceDown
+    };
+
 
   },
   methods: {
@@ -67,5 +75,14 @@ export default {
   width: 1em;
   text-align: center;
   transform: translate(-50%, 0);
+}
+.card.facedown {
+  background-image:
+    linear-gradient(45deg, rgba(224, 102, 102, 0.445) 25%, transparent 25%),
+    linear-gradient(135deg, rgba(224, 102, 102, 0.445) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%,rgba(224, 102, 102, 0.445) 75%),
+    linear-gradient(135deg, transparent 75%,rgba(224, 102, 102, 0.445) 75%);
+  background-size: 15px 15px;
+  background-position: 5px 5px;
 }
 </style>
