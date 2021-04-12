@@ -1,6 +1,11 @@
 <template>
-  <div class="card" v-bind:class="{facedown:isFaceDown}">
-    <div class="card-topleft">
+  <div class="card" 
+    v-bind:class="{facedown:isFaceDown}"
+    v-on:mousedown="(isFlippable) ? isFaceDown=false : {}"
+    v-on:mouseup="(isFlippable) ? isFaceDown=true : {}"
+    v-on:touchstart="(isFlippable) ? isFaceDown=false : {}"
+    v-on:touchend="(isFlippable) ? isFaceDown=true : {}">
+    <div class="card-topleft" v-if="isFaceDown == false">
       <div class="card-corner-rank">
        {{rank}}
       </div>
@@ -8,7 +13,7 @@
        {{suit}}
       </div>
     </div>
-    <div class="card-bottomright">
+    <div class="card-bottomright" v-if="isFaceDown == false">
       <div class="card-corner-rank">
         {{rank}}
       </div>
@@ -23,23 +28,24 @@
 
 export default {
   name: 'Card',
-  props: ['rank', 'suit'],
+  props: ['rank', 'suit', 'side'],
   setup() {
     
     
   },
   data() {
 
-    const faceDown = this.rank == null && this.suit == null;
+    const faceDown = this.side == 'faceDown'
+      || this.side == 'flippable';
+    const flippable = this.side == 'flippable';
     
     return {
-      isFaceDown: faceDown
+      isFaceDown: faceDown,
+      isFlippable: flippable
     };
-
-
   },
   methods: {
-    
+
   }
 }
 </script>
@@ -82,7 +88,9 @@ export default {
     linear-gradient(135deg, rgba(224, 102, 102, 0.445) 25%, transparent 25%),
     linear-gradient(45deg, transparent 75%,rgba(224, 102, 102, 0.445) 75%),
     linear-gradient(135deg, transparent 75%,rgba(224, 102, 102, 0.445) 75%);
-  background-size: 15px 15px;
+  background-size: 10px 10px;
   background-position: 5px 5px;
+  box-sizing: border-box;
+  border: 5px solid white;
 }
 </style>
