@@ -4,7 +4,7 @@
       id="login"
       v-on:submit.prevent="login(socket)"
     >
-      <label>Enter a user name:</label>
+      <label>Enter a player name:</label>
       <input id="name" type="text" v-model="name">
       <input type="submit" value="Login">
     </form>
@@ -29,8 +29,13 @@ export default {
   methods: {
     login(socket) { // TODO: Disable after submitting
       console.log('Sending user name:', this.name);
+      let vc = this;
       socket.emit('send-user-name', this.name, response => {
         console.log(response.status);
+        vc.$emit('joined', {
+          name: vc.name,
+          status: response.status
+        });
       });
     }
   }
