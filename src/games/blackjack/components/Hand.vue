@@ -1,6 +1,8 @@
 <template>
   <a v-for="card in cards" v-bind:key="card.rank">
-    <Card v-bind:rank="card.rank" v-bind:suit="card.suit"/>
+    <Card v-bind:rank="card.rank" 
+      v-bind:suit="card.suit" 
+      v-bind:side="card.side"/>
   </a>
 </template>
 
@@ -8,20 +10,17 @@
 import Card from './Card.vue';
 
 export default {
-  name: 'MyHand',
+  name: 'DealerHand',
   components: {
     Card
   },
-  props: [],
+  props: ['hand'],
   setup() {
 
   },
   data() {
     return {
-      cards: [
-        {rank: 'K', suit: '♠︎'},
-        {rank: '2', suit: '♥︎'}
-      ]
+      cards: this.hand
     }
 
   },

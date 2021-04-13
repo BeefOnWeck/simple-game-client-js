@@ -1,27 +1,43 @@
 <template>
   <div id="app">
     <h1>Blackjack</h1>
-    <h2>Dealer Hand</h2>
-    <DealerHand/>
-    <h2>Player 1</h2>
-    <MyHand/>
+    <h2>Dealer</h2>
+    <Hand v-bind:hand="dealerHand"/>
+    <h2>Other Players</h2>
+    <div v-for="(value,key) in otherPlayers" v-bind:key="key">
+      <h3>{{key}}</h3>
+      <Hand v-bind:hand="value"/>
+    </div>
     <h2>Your Hand</h2>
-    <MyHand/>
+    <Hand v-bind:hand="myHand"/>
   </div>
 </template>
 
 <script>
-import DealerHand from './components/DealerHand.vue'
-import MyHand from './components/MyHand.vue'
+import Hand from './components/Hand.vue'
 
 export default {
   name: 'Blackjack',
   components: {
-    DealerHand,
-    MyHand
+    Hand
   },
   data() {
-
+    return {
+      myHand: [
+        {rank: 'K', suit: '♠︎', side: 'flippable'},
+        {rank: '8', suit: '♣︎'}
+      ],
+      dealerHand: [
+        {rank: null, suit: null, side: 'faceDown'},
+        {rank: '2', suit: '♥︎'}
+      ],
+      otherPlayers: {
+        player1: [
+          {rank: null, suit: null, side: 'faceDown'},
+          {rank: '6', suit: '♦︎'}
+        ]
+      }
+    }
   },
   setup() {
 
