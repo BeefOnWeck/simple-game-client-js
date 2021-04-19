@@ -25,6 +25,9 @@ export default {
 
   },
   methods: {
+    // TODO: Allow players to change their initial bets
+    // TODO: Add controls for players to make their move (hit, etc.)
+    // TODO: Better styling for controls (at least spacing)
     makeBet(socket) {
       console.log('Trying to make a bet.');
       socket.emit('player-actions', {
