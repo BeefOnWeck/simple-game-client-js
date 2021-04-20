@@ -5,6 +5,14 @@
   >
     <input type="submit" value="Make Bet">
   </form>
+  <form 
+    id="make-move-control"
+    v-on:submit.prevent="makeMove(socket)"
+  >
+    <input type="submit" value="Hit">
+    <input type="submit" value="Stand">
+    <input type="submit" value="Double down">
+  </form>
 </template>
 
 <script>
@@ -34,6 +42,18 @@ export default {
         'make-initial-bet': {
           pid: socket.id,
           amount: 10
+        }
+      }, response => {
+        console.log(response.status);
+      });
+    },
+    makeMove(socket) {
+      console.log('Trying to make a move.');
+      console.log(this);
+      socket.emit('player-actions', {
+        'make-move': {
+          pid: socket.id,
+          move: 'hit'
         }
       }, response => {
         console.log(response.status);
