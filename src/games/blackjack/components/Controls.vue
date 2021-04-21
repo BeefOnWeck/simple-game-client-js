@@ -7,14 +7,24 @@
     <input type="text" name="bet" v-model="bet">
     <input type="submit" value="Make Bet">
   </form>
-  <!-- https://www.w3schools.com/css/css_navbar_horizontal.asp -->
+  <!-- TODO: https://www.w3schools.com/css/css_navbar_horizontal.asp -->
   <form 
     id="make-move-control"
-    v-on:submit.prevent="makeMove(socket)"
+    v-on:submit.prevent="makeMove(socket,'hit')"
   >
     <input type="submit" value="Hit">
+  </form>
+  <form 
+    id="make-move-control"
+    v-on:submit.prevent="makeMove(socket,'stand')"
+  >
     <input type="submit" value="Stand">
-    <input type="submit" value="Double down">
+  </form> 
+  <form 
+    id="make-move-control"
+    v-on:submit.prevent="makeMove(socket,'double')"
+  >
+    <input type="submit" value="Double">
   </form>
 </template>
 
@@ -50,13 +60,12 @@ export default {
         console.log(response.status);
       });
     },
-    makeMove(socket) {
+    makeMove(socket, move) {
       console.log('Trying to make a move.');
-      console.log(this);
       socket.emit('player-actions', {
         'make-move': {
           pid: socket.id,
-          move: 'hit'
+          move: move
         }
       }, response => {
         console.log(response.status);
