@@ -1,10 +1,13 @@
 <template>
+<!-- TODO: https://vuejs.org/v2/examples/modal.html -->
   <form 
     id="make-bet-control"
     v-on:submit.prevent="makeBet(socket)"
   >
+    <input type="text" name="bet" v-model="bet">
     <input type="submit" value="Make Bet">
   </form>
+  <!-- https://www.w3schools.com/css/css_navbar_horizontal.asp -->
   <form 
     id="make-move-control"
     v-on:submit.prevent="makeMove(socket)"
@@ -28,7 +31,7 @@ export default {
   },
   data() {
     return {
-      cards: this.hand
+      bet: 10
     }
 
   },
@@ -41,7 +44,7 @@ export default {
       socket.emit('player-actions', {
         'make-initial-bet': {
           pid: socket.id,
-          amount: 10
+          amount: parseInt(this.bet, 10)
         }
       }, response => {
         console.log(response.status);
