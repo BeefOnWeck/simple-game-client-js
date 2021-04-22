@@ -56,10 +56,7 @@ export default {
         {rank: 'K', suit: '♠︎', side: 'flippable'},
         {rank: '8', suit: '♣︎'}
       ],
-      dealerHand: [
-        {rank: null, suit: null, side: 'faceDown'},
-        {rank: '2', suit: '♥︎'}
-      ],
+      dealerHand: [],
       otherPlayers: {
         player1: [
           {rank: null, suit: null, side: 'faceDown'},
@@ -89,7 +86,17 @@ export default {
     });
     socket.on('game-state', (msg) => {
       console.log(msg);
-      
+      // Dealer hand
+      vc.dealerHand = [].fill(
+        {rank: null, suit: null, side: 'faceDown'},
+        0,
+        msg.state.playerHands['DEALER'].faceDown-1
+      );
+      msg.state.playerHands['DEALER'].faceUp.forEach(card => {
+        vc.dealerHand.push({rank: card.rank, suit: card.suit});
+      });
+      console.log(vc.dealerHand);
+
     });
 
   },
