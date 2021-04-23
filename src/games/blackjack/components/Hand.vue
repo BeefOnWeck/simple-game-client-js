@@ -26,6 +26,9 @@ export default {
   },
   methods: {
     
+  },
+  updated() {
+    this.cards = this.hand;
   }
 }
 </script>

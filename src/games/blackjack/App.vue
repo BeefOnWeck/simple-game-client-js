@@ -52,17 +52,9 @@ export default {
       hasJoined: false,
       myTurn: false,
       myActions: [],
-      myHand: [
-        {rank: 'K', suit: '♠︎', side: 'flippable'},
-        {rank: '8', suit: '♣︎'}
-      ],
+      myHand: [],
       dealerHand: [],
-      otherPlayers: {
-        player1: [
-          {rank: null, suit: null, side: 'faceDown'},
-          {rank: '6', suit: '♦︎'}
-        ]
-      }
+      otherPlayers: {}
     }
   },
   setup() {
@@ -86,17 +78,34 @@ export default {
     });
     socket.on('game-state', (msg) => {
       console.log(msg);
-      // Dealer hand
-      vc.dealerHand = [].fill(
-        {rank: null, suit: null, side: 'faceDown'},
-        0,
-        msg.state.playerHands['DEALER'].faceDown-1
-      );
-      msg.state.playerHands['DEALER'].faceUp.forEach(card => {
-        vc.dealerHand.push({rank: card.rank, suit: card.suit});
-      });
-      console.log(vc.dealerHand);
+      for (const [pid, phand] of Object.entries(msg.state.playerHands)) {
 
+        let thisHand = Array.from({length: phand.faceDown});
+
+        if (pid == vc.myId) {
+          thisHand = [];
+          phand.faceDown.forEach(card => {
+            thisHand.push({rank: card.rank, suit: card.suit, side: 'flippable'});
+          });
+        } else {
+          thisHand = thisHand.fill({rank: null, suit: null, side: 'faceDown'});
+        }
+
+        phand.faceUp.forEach(card => {
+          thisHand.push({rank: card.rank, suit: card.suit});
+        });
+
+        if (pid == 'DEALER') { vc.dealerHand = thisHand; }
+        else if (pid == vc.myId) { vc.myHand = thisHand; }
+        else {
+          const playerName = msg.players
+            .filter(ply => ply.id == pid)
+            .map(ply => ply.name)[0];
+          vc.otherPlayers[playerName] = thisHand; 
+        }
+
+      }
+      
     });
 
   },
