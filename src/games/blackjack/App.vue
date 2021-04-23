@@ -78,26 +78,34 @@ export default {
     });
     socket.on('game-state', (msg) => {
       console.log(msg);
+
+      // Update all player hands
       for (const [pid, phand] of Object.entries(msg.state.playerHands)) {
 
+        // Start with an empty array for the face down cards
         let thisHand = Array.from({length: phand.faceDown});
 
+        // If this is the current player we need to preserve the card rank and 
+        // suit and mark the face down card as flippable.
         if (pid == vc.myId) {
-          thisHand = [];
           phand.faceDown.forEach(card => {
             thisHand.push({rank: card.rank, suit: card.suit, side: 'flippable'});
           });
-        } else {
+        } else { // Otherwise strip the card rank and suit.
           thisHand = thisHand.fill({rank: null, suit: null, side: 'faceDown'});
         }
 
+        // Add the face up cards to the player hand.
         phand.faceUp.forEach(card => {
           thisHand.push({rank: card.rank, suit: card.suit});
         });
 
+        // Assign this hand to either the dealer, the current player, or the 
+        // other player(s).
         if (pid == 'DEALER') { vc.dealerHand = thisHand; }
         else if (pid == vc.myId) { vc.myHand = thisHand; }
         else {
+          // Look up the player name based upon their id
           const playerName = msg.players
             .filter(ply => ply.id == pid)
             .map(ply => ply.name)[0];
