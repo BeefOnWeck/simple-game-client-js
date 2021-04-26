@@ -79,6 +79,7 @@ export default {
     });
     socket.on('game-state', (msg) => {
       console.log(msg);
+      vc.stateMessage = '';
 
       // Update all player hands
       for (const [pid, phand] of Object.entries(msg.state.playerHands)) {
