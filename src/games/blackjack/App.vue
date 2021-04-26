@@ -13,7 +13,7 @@
       <h2>Your Hand</h2>
       <Hand v-bind:hand="myHand"/>
       <div>
-        <Controls v-bind:actions="myActions"/>
+        <Controls v-bind:message="stateMessage"/>
       </div>
     </div>
   </div>
@@ -51,7 +51,7 @@ export default {
       myName: null,
       hasJoined: false,
       myTurn: false,
-      myActions: [],
+      stateMessage: 'Waiting for game to start...',
       myHand: [],
       dealerHand: [],
       otherPlayers: {}
@@ -71,10 +71,11 @@ export default {
     });
     socket.on('start-your-turn', (msg) => {
       vc.myTurn = true;
-      console.log('I am the active player');
       // Message should contain what actions the player needs to take
-      vc.myActions = msg;
-      console.log(msg);
+      let actionMessage = msg == 'make-initial-bet' ?
+        'Make your initial bet.' :
+        'Make your move (hit, stand, double)';
+      vc.stateMessage = 'It\'s your turn: ' + actionMessage;
     });
     socket.on('game-state', (msg) => {
       console.log(msg);

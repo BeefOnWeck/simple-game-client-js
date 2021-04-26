@@ -1,5 +1,7 @@
 <template>
-<!-- TODO: https://vuejs.org/v2/examples/modal.html -->
+  <div class="message-bar">
+    {{localMessage}}
+  </div>
   <form 
     id="make-bet-control"
     v-on:submit.prevent="makeBet(socket)"
@@ -34,14 +36,15 @@ import { inject } from 'vue';
 export default {
   name: 'Controls',
   components: {},
-  props: ['actions'],
+  props: ['message'],
   setup() {
     const socket = inject('socket');
     return {socket};
   },
   data() {
     return {
-      bet: 10
+      bet: 10,
+      localMessage: this.message
     }
 
   },
@@ -57,7 +60,7 @@ export default {
           amount: parseInt(this.bet, 10)
         }
       }, response => {
-        console.log(response.status);
+        this.localMessage = response.status;
       });
     },
     makeMove(socket, move) {
@@ -68,9 +71,13 @@ export default {
           move: move
         }
       }, response => {
-        console.log(response.status);
+        this.localMessage = response.status;
       });
     }
+  },
+  updated() {
+    // We need to update our mutable copy whenever the board property is updated
+    this.localMessage = this.message;
   }
 }
 </script>
