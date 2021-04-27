@@ -12,19 +12,19 @@
   <!-- TODO: https://www.w3schools.com/css/css_navbar_horizontal.asp -->
   <form 
     id="make-move-control"
-    v-on:submit.prevent="makeMove(socket,'hit')"
+    v-on:submit.prevent="makeMove(socket,'Hit')"
   >
     <input type="submit" value="Hit">
   </form>
   <form 
     id="make-move-control"
-    v-on:submit.prevent="makeMove(socket,'stand')"
+    v-on:submit.prevent="makeMove(socket,'Stand')"
   >
     <input type="submit" value="Stand">
   </form> 
   <form 
     id="make-move-control"
-    v-on:submit.prevent="makeMove(socket,'double')"
+    v-on:submit.prevent="makeMove(socket,'Double')"
   >
     <input type="submit" value="Double">
   </form>
