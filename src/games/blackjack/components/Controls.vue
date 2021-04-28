@@ -1,9 +1,9 @@
 <template>
   <div class="message-bar">
-    <div class="status-message">
+    <div v-bind:class="{'status-message':localMessage!=''}">
       {{localMessage}}
     </div>
-    <div class="error-message">
+    <div v-bind:class="{'error-message':errorMessage!=''}">
       {{errorMessage}}
     </div>
   </div>
@@ -92,4 +92,13 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+.message-bar > div {
+  height: 22px;
+}
+.error-message {
+  background-color: lightpink;
+}
+.status-message {
+  background-color: lightgreen;
+}
 </style>
