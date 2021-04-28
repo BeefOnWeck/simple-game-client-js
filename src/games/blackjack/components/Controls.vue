@@ -1,6 +1,11 @@
 <template>
   <div class="message-bar">
-    {{localMessage}}
+    <div class="status-message">
+      {{localMessage}}
+    </div>
+    <div class="error-message">
+      {{errorMessage}}
+    </div>
   </div>
   <form 
     id="make-bet-control"
@@ -44,7 +49,8 @@ export default {
   data() {
     return {
       bet: 10,
-      localMessage: this.message
+      localMessage: this.message,
+      errorMessage: ''
     }
 
   },
@@ -60,7 +66,8 @@ export default {
           amount: parseInt(this.bet, 10)
         }
       }, response => {
-        this.localMessage = response.status;
+        this.errorMessage = response.status;
+        setTimeout(vc => vc.errorMessage = '', 3000, this);
       });
     },
     makeMove(socket, move) {
@@ -71,7 +78,8 @@ export default {
           move: move
         }
       }, response => {
-        this.localMessage = response.status;
+        this.errorMessage = response.status;
+        setTimeout(vc => vc.errorMessage = '', 3000, this);
       });
     }
   },
