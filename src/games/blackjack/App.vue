@@ -3,6 +3,15 @@
     <Login @joined="joinedListener" v-if="!hasJoined"/>
     <div id="game-space" v-if="hasJoined">
       <h1>Blackjack</h1>
+        <div class="progress">
+          <b>Round:</b> {{round}}
+        </div>
+        <div class="progress">
+          <b>Turn:</b> {{activePlayerName}}
+        </div>
+        <div class="progress">
+          <b>Action:</b> {{currentAction}}
+        </div>
       <h2>Dealer</h2>
       <Hand v-bind:hand="dealerHand"/>
       <h2>Other Players</h2>
@@ -51,6 +60,9 @@ export default {
       myName: null,
       hasJoined: false,
       myTurn: false,
+      round: 1,
+      activePlayerName: '',
+      currentAction: '',
       stateMessage: 'Waiting for game to start...',
       myHand: [],
       dealerHand: [],
@@ -80,6 +92,13 @@ export default {
     socket.on('game-state', (msg) => {
       console.log(msg);
       vc.stateMessage = '';
+
+      // Update the round and turn fields
+      vc.round = msg.round;
+      vc.activePlayerName = msg.players
+        .filter(ply => ply.id == msg.activePlayer)
+        .map(ply => ply.name)[0];
+      vc.currentAction = msg.currentActions[0];
 
       // Update all player hands
       for (const [pid, phand] of Object.entries(msg.state.playerHands)) {
@@ -145,5 +164,9 @@ body {
   width: 50%;
   border: 1px solid #2c3e50;
   padding: 10px;
+}
+.progress {
+  display: inline-block;
+  margin-right: 15px;
 }
 </style>
