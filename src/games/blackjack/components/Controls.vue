@@ -1,5 +1,5 @@
 <template>
-  <div class="message-bar">
+  <div class="controls-and-status" id="message-bar">
     <div v-bind:class="{'status-message':localMessage!=''}">
       {{localMessage}}
     </div>
@@ -9,6 +9,7 @@
   </div>
   <form 
     id="make-bet-control"
+    class="controls-and-status"
     v-on:submit.prevent="makeBet(socket)"
   >
     <input type="text" name="bet" v-model="bet">
@@ -17,18 +18,21 @@
   <!-- TODO: https://www.w3schools.com/css/css_navbar_horizontal.asp -->
   <form 
     id="make-move-control"
+    class="controls-and-status"
     v-on:submit.prevent="makeMove(socket,'Hit')"
   >
     <input type="submit" value="Hit">
   </form>
   <form 
     id="make-move-control"
+    class="controls-and-status"
     v-on:submit.prevent="makeMove(socket,'Stand')"
   >
     <input type="submit" value="Stand">
   </form> 
   <form 
     id="make-move-control"
+    class="controls-and-status"
     v-on:submit.prevent="makeMove(socket,'Double')"
   >
     <input type="submit" value="Double">
@@ -92,7 +96,11 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.message-bar > div {
+#message-bar {
+  padding-top: 20px;
+  padding-bottom: 5px;
+}
+#message-bar > div {
   height: 22px;
 }
 .error-message {
@@ -100,5 +108,9 @@ export default {
 }
 .status-message {
   background-color: lightgreen;
+}
+.controls-and-status {
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 </style>

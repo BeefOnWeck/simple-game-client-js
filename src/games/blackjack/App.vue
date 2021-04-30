@@ -1,7 +1,7 @@
 <template>
   <div id="app" v-if="isConnected">
     <Login @joined="joinedListener" v-if="!hasJoined"/>
-    <div v-if="hasJoined">
+    <div id="game-space" v-if="hasJoined">
       <h1>Blackjack</h1>
       <h2>Dealer</h2>
       <Hand v-bind:hand="dealerHand"/>
@@ -133,10 +133,17 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  margin-top: 20px;
 }
 body {
-  background-color: #eee;
+  /* background-color: #eee; */
   font-family: sans-serif;
+}
+#game-space{
+  background-color: #eee;
+  margin: auto;
+  width: 50%;
+  border: 1px solid #2c3e50;
+  padding: 10px;
 }
 </style>
