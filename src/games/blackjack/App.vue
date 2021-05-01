@@ -13,13 +13,14 @@
           <b>Action:</b> {{currentAction}}
         </div>
       <h2>Dealer</h2>
+      <!-- TODO: Show player funds next to names -->
       <Hand v-bind:hand="dealerHand"/>
       <h2>Other Players</h2>
       <div v-for="(value,key) in otherPlayers" v-bind:key="key">
-        <h3>{{key}}</h3>
+        <h3>{{key}} (${{otherPlayerFunds[key]}})</h3>
         <Hand v-bind:hand="value"/>
       </div>
-      <h2>Your Hand</h2>
+      <h2>You (${{yourFunds}})</h2>
       <Hand v-bind:hand="myHand"/>
       <div>
         <Controls v-bind:message="stateMessage"/>
@@ -66,7 +67,9 @@ export default {
       stateMessage: 'Waiting for game to start...',
       myHand: [],
       dealerHand: [],
-      otherPlayers: {}
+      otherPlayers: {},
+      otherPlayerFunds: {},
+      yourFunds: 0
     }
   },
   setup() {
@@ -99,6 +102,21 @@ export default {
         .filter(ply => ply.id == msg.activePlayer)
         .map(ply => ply.name)[0];
       vc.currentAction = msg.currentActions[0];
+
+      // Update player funds
+
+      // your funds
+      vc.yourFunds = msg.state.playerFunds
+        .filter(fnd => fnd.id == vc.myId)
+        .map(fnd => fnd.amount)[0];
+
+      // other player funds
+      for (const fnd of msg.state.playerFunds) {
+        let pname = msg.players
+            .filter(ply => ply.id == fnd.id)
+            .map(ply => ply.name)[0];
+        vc.otherPlayerFunds[pname] = fnd.amount;
+      }
 
       // Update all player hands
       for (const [pid, phand] of Object.entries(msg.state.playerHands)) {
