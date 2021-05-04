@@ -13,7 +13,6 @@
           <b>Action:</b> {{currentAction}}
         </div>
       <h2>Dealer</h2>
-      <!-- TODO: Show player funds next to names -->
       <Hand v-bind:hand="dealerHand"/>
       <h2>Other Players</h2>
       <div v-for="(value,key) in otherPlayers" v-bind:key="key">
@@ -103,14 +102,12 @@ export default {
         .map(ply => ply.name)[0];
       vc.currentAction = msg.currentActions[0];
 
-      // Update player funds
-
-      // your funds
+      // Update your funds
       vc.yourFunds = msg.state.playerFunds
         .filter(fnd => fnd.id == vc.myId)
         .map(fnd => fnd.amount)[0];
 
-      // other player funds
+      // Update other player funds
       for (const fnd of msg.state.playerFunds) {
         let pname = msg.players
             .filter(ply => ply.id == fnd.id)
