@@ -13,6 +13,13 @@ module.exports = {
       title: 'blackjack',
       filename: "blackjack.html",
       chunks: ['chunk-vendors', 'chunk-common', 'blackjack']
+    },
+    hexagon: {
+      entry: 'src/games/hexagon-island/main.js',
+      template: 'public/index.html',
+      title: 'hexagon',
+      filename: "hexagon-island.html",
+      chunks: ['chunk-vendors', 'chunk-common', 'hexagon']
     }
   }
 }
