@@ -1,12 +1,15 @@
 <template>
   <div id="app" v-if="isConnected">
     <Login @joined="joinedListener" v-if="!hasJoined"/>
-    
+    <div id="game-space" v-if="hasJoined">
+      <Grid v-bind:board="gameBoard"/>
+    </div>
   </div>
 </template>
 
 <script>
 import Login from '../tic-tac-toe/components/Login.vue'
+import Grid from './components/Grid.vue'
 
 import { provide } from 'vue'
 import { io } from 'socket.io-client'
@@ -16,7 +19,8 @@ const socket = io('http://localhost:3000');
 export default {
   name: 'Hexagon Island',
   components: {
-    Login
+    Login,
+    Grid
   },
   methods: {
     joinedListener(e) {
@@ -37,6 +41,14 @@ export default {
       activePlayerName: '',
       currentAction: '',
       stateMessage: 'Waiting for game to start...',
+      gameBoard: {
+        centroids: [],
+        nodes: [],
+        hexagons: [],
+        numbers: [],
+        roads: [],
+        lines: []
+      }
     }
   },
   setup() {
@@ -69,6 +81,35 @@ export default {
         .filter(ply => ply.id == msg.activePlayer)
         .map(ply => ply.name)[0];
       vc.currentAction = msg.currentActions[0];
+
+      // Update the board using the state message
+      msg.state.centroids.forEach((cent,idx) => {
+        this.gameBoard.centroids.splice(idx,1,cent);
+      });
+      msg.state.nodes.forEach((node,idx) => {
+        this.gameBoard.nodes.splice(idx,1,node);
+      });
+      msg.state.hexagons.forEach((hex,idx) => {
+        // SVG polygon defining a hexagon
+        let poly = hex.poly.reduce((acc, cv, ci) => {
+          return ci<5 ? acc + `${cv.x},${cv.y}, ` : acc + `${cv.x},${cv.y}`;
+        }, '');
+        this.gameBoard.hexagons.splice(idx,1,{
+          poly: poly,
+          resource: hex.resource
+        });
+      });
+      msg.state.numbers.forEach((num,idx) => {
+        this.gameBoard.numbers.splice(idx,1,num);
+      });
+      msg.state.roads.forEach((road,idx) => {
+        this.gameBoard.roads.splice(idx,1,road);
+        // Define SVG road lines
+        let node1 = msg.state.nodes[road[0]];
+        let node2 = msg.state.nodes[road[1]];
+        let path = `M ${node1.x} ${node1.y} L ${node2.x} ${node2.y}`;
+        this.gameBoard.lines.splice(idx,1,path);
+      });
       
     });
 
