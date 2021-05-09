@@ -1,6 +1,6 @@
 <template>
   <div class="grid">
-    <svg width="100%">
+    <svg :viewBox=svgViewBox>
       <g>
         <polygon v-for="{poly, resource, idx} in hexagons" :key=idx :points=poly v-bind:class=resource></polygon>
         <circle v-for="{x, y, idx} in centroids" :key="idx" :cx=x :cy=y r="15" class="centroid"/>
@@ -18,8 +18,9 @@
 export default {
   name: 'Grid',
   props: ['board'],
-  data(){
+  data() {
     return {
+      svgViewBox: "0 0 100 100",
       centroids: this.board.centroids,
       nodes: this.board.nodes,
       hexagons: this.board.hexagons,
@@ -27,6 +28,29 @@ export default {
       roads: this.board.roads,
       lines: this.board.lines
     }
+  },
+  updated() {
+
+    let nodeBounds = this.nodes.reduce((acc, cv) => {
+      return [
+        cv.x < acc[0] ? cv.x : acc[0],
+        cv.x >= acc[1] ? cv.x : acc[1],
+        cv.y < acc[2] ? cv.y : acc[2],
+        cv.y >= acc[3] ? cv.y : acc[3] 
+      ];
+    },[9999, -9999, 9999, -9999]);
+
+    let widthX = (nodeBounds[1]-nodeBounds[0]);
+    widthX = widthX > 0 ? widthX : 100;
+    let widthY = (nodeBounds[3]-nodeBounds[2]);
+    widthY = widthY > 0 ? widthY : 100;
+
+    this.svgViewBox = "" +
+      (nodeBounds[0]-widthX/10) + " " +
+      (nodeBounds[2]-widthY/10) + " " +
+      widthX*1.2 + " " +
+      widthY*1.2;
+
   }
 }
 </script>
@@ -52,7 +76,7 @@ export default {
   fill: khaki;
 }
 .grid svg g {
-  transform: translate(50px, 50px);
+  /* transform: translate(100px, 100px); */
 }
 /* .grid svg g polygon{
   fill:forestgreen;

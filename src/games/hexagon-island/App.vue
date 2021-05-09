@@ -134,4 +134,11 @@ body {
   /* background-color: #eee; */
   font-family: sans-serif;
 }
+#game-space{
+  background-color: #eee;
+  margin: auto;
+  width: 50%;
+  border: 1px solid #2c3e50;
+  padding: 10px;
+}
 </style>
