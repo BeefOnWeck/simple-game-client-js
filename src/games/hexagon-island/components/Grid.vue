@@ -31,6 +31,7 @@ export default {
   },
   updated() {
 
+    // Compute a bounding box that contains all of the nodes
     let nodeBounds = this.nodes.reduce((acc, cv) => {
       return [
         cv.x < acc[0] ? cv.x : acc[0],
@@ -40,11 +41,13 @@ export default {
       ];
     },[9999, -9999, 9999, -9999]);
 
+    // Compute the dimensions of the bounding box
     let widthX = (nodeBounds[1]-nodeBounds[0]);
     widthX = widthX > 0 ? widthX : 100;
     let widthY = (nodeBounds[3]-nodeBounds[2]);
     widthY = widthY > 0 ? widthY : 100;
 
+    // Set the SVG viewBox, with a 10% margin on the borders
     this.svgViewBox = "" +
       (nodeBounds[0]-widthX/10) + " " +
       (nodeBounds[2]-widthY/10) + " " +
@@ -75,9 +78,9 @@ export default {
 .desert {
   fill: khaki;
 }
-.grid svg g {
+/* .grid svg g { */
   /* transform: translate(100px, 100px); */
-}
+/* } */
 /* .grid svg g polygon{
   fill:forestgreen;
 } */
