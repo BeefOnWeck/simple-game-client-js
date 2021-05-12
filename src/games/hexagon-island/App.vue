@@ -105,8 +105,8 @@ export default {
       msg.state.roads.forEach((road,idx) => {
         this.gameBoard.roads.splice(idx,1,road);
         // Define SVG road lines
-        let node1 = msg.state.nodes[road[0]];
-        let node2 = msg.state.nodes[road[1]];
+        let node1 = msg.state.nodes[road.inds[0]];
+        let node2 = msg.state.nodes[road.inds[1]];
         let path = `M ${node1.x} ${node1.y} L ${node2.x} ${node2.y}`;
         this.gameBoard.lines.splice(idx,1,path);
       });

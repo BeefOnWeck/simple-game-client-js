@@ -24,7 +24,7 @@ export default {
       centroids: this.board.centroids,
       nodes: this.board.nodes,
       hexagons: this.board.hexagons,
-      numbers: this.board.numbers,
+      numbers: this.board.numbers, // TODO: Not currently used; consider removing.
       roads: this.board.roads,
       lines: this.board.lines
     }
