@@ -27,7 +27,7 @@ export default {
     };
   },
   methods: {
-    login(socket) { // TODO: Disable after submitting
+    login(socket) { 
       console.log('Sending user name:', this.name);
       let vc = this;
       socket.emit('send-user-name', this.name, response => {

@@ -60,19 +60,19 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.brick {
+.block {
   fill: darkred;
 }
-.ore {
+.rock {
   fill: gray;
 }
-.wood {
+.timber {
   fill:green;;
 }
-.grain {
+.cereal {
   fill: goldenrod;
 }
-.sheep {
+.fiber {
   fill: ghostwhite;
 }
 .desert {
