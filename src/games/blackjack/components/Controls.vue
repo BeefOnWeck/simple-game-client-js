@@ -37,6 +37,12 @@
   >
     <input type="submit" value="Double">
   </form>
+  <form 
+    id="end-turn-control"
+    v-on:submit.prevent="endturn(socket)"
+  >
+    <input type="submit" value="End Turn">
+  </form>
 </template>
 
 <script>
@@ -81,6 +87,12 @@ export default {
       }, response => {
         this.errorMessage = response.status;
         setTimeout(vc => vc.errorMessage = '', 3000, this);
+      });
+    },
+    endturn(socket) {
+      console.log('Trying to end my turn.');
+      socket.emit('end-my-turn', {}, response => {
+        console.log(response.status);
       });
     }
   },
