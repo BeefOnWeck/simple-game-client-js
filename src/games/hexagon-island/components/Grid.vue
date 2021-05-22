@@ -7,6 +7,8 @@
         <text v-for="{x, y, number, idx} in centroids" :key="idx" :x=x :y=y dy="0.35em" text-anchor="middle" class="number">{{number}}</text> 
         <circle v-for="{x, y, idx} in nodes" :key="idx" :cx=x :cy=y r="3"/>
         <path v-for="line in lines" :key=line :d=line />
+        <!-- <polygon points="0,0 20,0 20,-15 10,-25 0,-15" transform="translate(0 0)"/> -->
+        <polygon v-for="{x, y, playerId, idx} in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x},${y})`" v-bind:class=playerId></polygon>
       </g>
     </svg>
   </div>
@@ -26,10 +28,13 @@ export default {
       hexagons: this.board.hexagons,
       numbers: this.board.numbers, // TODO: Not currently used; consider removing.
       roads: this.board.roads,
-      lines: this.board.lines
+      lines: this.board.lines,
+      villages: this.board.villages
     }
   },
   updated() {
+
+    this.villages = this.board.villages;
 
     // Compute a bounding box that contains all of the nodes
     let nodeBounds = this.nodes.reduce((acc, cv) => {

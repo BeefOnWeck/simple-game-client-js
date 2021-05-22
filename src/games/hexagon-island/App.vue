@@ -52,7 +52,8 @@ export default {
         hexagons: [],
         numbers: [],
         roads: [],
-        lines: []
+        lines: [],
+        villages: []
       }
     }
   },
@@ -80,6 +81,7 @@ export default {
     socket.on('game-state', (msg) => {
       console.log(msg);
       vc.stateMessage = '';
+      vc.gameBoard.villages = [];
 
       // Update the round and turn fields
       vc.round = msg.round;
@@ -90,31 +92,38 @@ export default {
 
       // Update the board using the state message
       msg.state.centroids.forEach((cent,idx) => {
-        this.gameBoard.centroids.splice(idx,1,cent);
+        vc.gameBoard.centroids.splice(idx,1,cent);
       });
       msg.state.nodes.forEach((node,idx) => {
-        this.gameBoard.nodes.splice(idx,1,node);
+        vc.gameBoard.nodes.splice(idx,1,node);
+        if (idx==1) { //node.buildingType) {
+          vc.gameBoard.villages.push({
+            x: node.x,
+            y: node.y,
+            playerId: 'id1' //node.playerId
+          });
+        }
       });
       msg.state.hexagons.forEach((hex,idx) => {
         // SVG polygon defining a hexagon
         let poly = hex.poly.reduce((acc, cv, ci) => {
           return ci<5 ? acc + `${cv.x},${cv.y}, ` : acc + `${cv.x},${cv.y}`;
         }, '');
-        this.gameBoard.hexagons.splice(idx,1,{
+        vc.gameBoard.hexagons.splice(idx,1,{
           poly: poly,
           resource: hex.resource
         });
       });
       msg.state.numbers.forEach((num,idx) => {
-        this.gameBoard.numbers.splice(idx,1,num);
+        vc.gameBoard.numbers.splice(idx,1,num);
       });
       msg.state.roads.forEach((road,idx) => {
-        this.gameBoard.roads.splice(idx,1,road);
+        vc.gameBoard.roads.splice(idx,1,road);
         // Define SVG road lines
         let node1 = msg.state.nodes[road.inds[0]];
         let node2 = msg.state.nodes[road.inds[1]];
         let path = `M ${node1.x} ${node1.y} L ${node2.x} ${node2.y}`;
-        this.gameBoard.lines.splice(idx,1,path);
+        vc.gameBoard.lines.splice(idx,1,path);
       });
       
     });
