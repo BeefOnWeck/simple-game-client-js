@@ -4,12 +4,16 @@
     <div id="game-space" v-if="hasJoined">
       <Grid v-bind:board="gameBoard"/>
     </div>
+    <div>
+      <Controls v-bind:message="stateMessage"/>
+    </div>
   </div>
 </template>
 
 <script>
 import Login from '../tic-tac-toe/components/Login.vue'
 import Grid from './components/Grid.vue'
+import Controls from './components/Controls.vue'
 
 import { provide } from 'vue'
 import { io } from 'socket.io-client'
@@ -20,7 +24,8 @@ export default {
   name: 'Hexagon Island',
   components: {
     Login,
-    Grid
+    Grid,
+    Controls
   },
   methods: {
     joinedListener(e) {
@@ -66,9 +71,10 @@ export default {
     socket.on('start-your-turn', (msg) => {
       vc.myTurn = true;
       // Message should contain what actions the player needs to take
-      let actionMessage = msg == 'make-initial-bet' ?
-        'Make your initial bet.' :
-        'Make your move (hit, stand, double)';
+      let actionMessage = msg;
+      if (actionMessage == 'setup-villages-and-roads') {
+        actionMessage = 'Place one village and one road';
+      }
       vc.stateMessage = 'It\'s your turn: ' + actionMessage;
     });
     socket.on('game-state', (msg) => {
