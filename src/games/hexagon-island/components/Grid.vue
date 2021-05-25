@@ -11,15 +11,25 @@
         <polygon v-for="{x, y, playerId, idx} in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x},${y})`" v-bind:class=playerId></polygon>
       </g>
     </svg>
+    <div>
+      <Controls v-bind:message="message" v-bind:action="action"/>
+    </div>
   </div>
 </template>
 
 <script>
-
+import Controls from './Controls.vue'
 
 export default {
   name: 'Grid',
-  props: ['board'],
+  components: {
+    Controls
+  },
+  props: [
+    'board',
+    'message',
+    'action'
+  ],
   data() {
     return {
       svgViewBox: "0 0 100 100",

@@ -21,14 +21,17 @@ import { inject } from 'vue';
 export default {
   name: 'Controls',
   components: {},
-  props: ['message'],
+  props: [
+    'message',
+    'action'
+  ],
   setup() {
     const socket = inject('socket');
     return {socket};
   },
   data() {
     return {
-      bet: 10,
+      localAction: this.action,
       localMessage: this.message,
       errorMessage: ''
     }
@@ -69,6 +72,7 @@ export default {
   updated() {
     // We need to update our mutable copy whenever the board property is updated
     this.localMessage = this.message;
+    this.localAction = this.action;
   }
 }
 </script>
