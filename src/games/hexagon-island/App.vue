@@ -92,13 +92,14 @@ export default {
       });
       msg.state.nodes.forEach((node,idx) => {
         vc.gameBoard.nodes.splice(idx,1,node);
-        if (idx==1) { //node.buildingType) {
-          vc.gameBoard.villages.push({
-            x: node.x,
-            y: node.y,
-            playerId: 'id1' //node.playerId
-          });
-        }
+        const nodesPlayer = msg.players.filter(p => p.id === node.playerId)[0];
+        const color = nodesPlayer ? nodesPlayer.color : null;
+        vc.gameBoard.villages.push({
+          x: node.x,
+          y: node.y,
+          color: color,
+          opacity: color ? 1.0 : 0.0
+        });
       });
       msg.state.hexagons.forEach((hex,idx) => {
         // SVG polygon defining a hexagon
@@ -114,12 +115,19 @@ export default {
         vc.gameBoard.numbers.splice(idx,1,num);
       });
       msg.state.roads.forEach((road,idx) => {
-        vc.gameBoard.roads.splice(idx,1,road);
-        // Define SVG road lines
+        // Define SVG lines for all potential roads
         let node1 = msg.state.nodes[road.inds[0]];
         let node2 = msg.state.nodes[road.inds[1]];
         let path = `M ${node1.x} ${node1.y} L ${node2.x} ${node2.y}`;
         vc.gameBoard.lines.splice(idx,1,path);
+        // Define SVG for built roads
+        const roadsPlayer = msg.players.filter(p => p.id === road.playerId)[0];
+        const color = roadsPlayer ? roadsPlayer.color : 'black';
+        vc.gameBoard.roads.splice(idx,1,{
+          path: path,
+          color: color,
+          opacity: color!='black' ? 1.0 : 0.0
+        });
       });
       
     });

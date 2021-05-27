@@ -5,10 +5,10 @@
         <polygon v-for="{poly, resource, idx} in hexagons" :key=idx :points=poly v-bind:class=resource></polygon>
         <circle v-for="{x, y, idx} in centroids" :key="idx" :cx=x :cy=y r="15" class="centroid"/>
         <text v-for="{x, y, number, idx} in centroids" :key="idx" :x=x :y=y dy="0.35em" text-anchor="middle" class="number">{{number}}</text> 
-        <circle class="nodes" v-for="{x, y, idx} in nodes" :key="idx" :cx=x :cy=y r="3" @click="select($event)"/>
-        <path class="roads" v-for="line in lines" :key=line :d=line @click="select($event)"/>
-        <!-- <polygon points="0,0 20,0 20,-15 10,-25 0,-15" transform="translate(0 0)"/> -->
-        <polygon v-for="{x, y, playerId, idx} in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x},${y})`" v-bind:class=playerId></polygon>
+        <path v-for="line in lines" :key=line :d=line class="outlines"/>
+        <path v-for="{path, color, opacity, idx} in roads" :key=idx :d=path stroke-width=5 :stroke=color :stroke-opacity=opacity @click="selectRoad($event)"/>
+        <circle v-for="{x, y, idx} in nodes" :key="idx" :cx=x :cy=y r="3"/>
+        <polygon v-for="{x, y, color, opacity, idx} in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x-10},${y+10})`" :fill=color :fill-opacity=opacity @click="selectNode($event)"></polygon>
       </g>
     </svg>
     <div>
@@ -43,7 +43,10 @@ export default {
     }
   },
   methods: {
-    select(event) {
+    selectRoad(event) {
+      console.log(event.target);
+    },
+    selectNode(event) {
       console.log(event.target);
     }
   },
@@ -104,7 +107,7 @@ export default {
 /* .grid svg g polygon{
   fill:forestgreen;
 } */
-.grid svg g path{
+.outlines{
   stroke: black;
 }
 .centroid {
