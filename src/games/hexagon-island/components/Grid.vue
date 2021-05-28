@@ -2,17 +2,17 @@
   <div class="grid">
     <svg :viewBox=svgViewBox>
       <g>
-        <polygon v-for="{poly, resource, idx} in hexagons" :key=idx :points=poly v-bind:class=resource></polygon>
+        <polygon v-for="({poly, resource}, idx) in hexagons" :key=idx :points=poly v-bind:class=resource></polygon>
         <circle v-for="{x, y, idx} in centroids" :key="idx" :cx=x :cy=y r="15" class="centroid"/>
         <text v-for="{x, y, number, idx} in centroids" :key="idx" :x=x :y=y dy="0.35em" text-anchor="middle" class="number">{{number}}</text> 
         <path v-for="line in lines" :key=line :d=line class="outlines"/>
-        <path v-for="{path, color, opacity, idx} in roads" :key=idx :d=path stroke-width=5 :stroke=color :stroke-opacity=opacity @click="selectRoad($event)"/>
+        <path v-for="({path, color, opacity}, idx) in roads" :key=idx :d=path stroke-width=5 :stroke=color :stroke-opacity=opacity @click="selectRoad(`${idx}`)"/>
         <circle v-for="{x, y, idx} in nodes" :key="idx" :cx=x :cy=y r="3"/>
-        <polygon v-for="{x, y, color, opacity, idx} in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x-10},${y+10})`" :fill=color :fill-opacity=opacity @click="selectNode($event)"></polygon>
+        <polygon v-for="({x, y, color, opacity}, idx) in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x-10},${y+10})`" :fill=color :fill-opacity=opacity @click="selectNode(`${idx}`)"></polygon>
       </g>
     </svg>
     <div>
-      <Controls v-bind:message="message" v-bind:action="action"/>
+      <Controls v-bind:message="message" v-bind:action="action" v-bind:selected="selected"/>
     </div>
   </div>
 </template>
@@ -39,15 +39,21 @@ export default {
       numbers: this.board.numbers, // TODO: Not currently used; consider removing.
       roads: this.board.roads,
       lines: this.board.lines,
-      villages: this.board.villages
+      villages: this.board.villages,
+      selected: {
+        roads: new Set(),
+        nodes: new Set()
+      }
     }
   },
   methods: {
-    selectRoad(event) {
-      console.log(event.target);
+    selectRoad(index) {
+      console.log(index);
+      this.selected.roads.add(index);
     },
-    selectNode(event) {
-      console.log(event.target);
+    selectNode(index) {
+      console.log(index);
+      this.selected.nodes.add(index);
     }
   },
   updated() {

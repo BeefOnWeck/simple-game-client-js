@@ -8,6 +8,12 @@
     </div>
   </div>
   <form 
+    id="build-control"
+    v-on:submit.prevent="build(socket)"
+  >
+    <input type="submit" value="Build Selected">
+  </form>
+  <form 
     id="end-turn-control"
     v-on:submit.prevent="endturn(socket)"
   >
@@ -23,7 +29,8 @@ export default {
   components: {},
   props: [
     'message',
-    'action'
+    'action',
+    'selected'
   ],
   setup() {
     const socket = inject('socket');
@@ -33,34 +40,26 @@ export default {
     return {
       localAction: this.action,
       localMessage: this.message,
-      errorMessage: ''
+      errorMessage: '',
+      selectedToBuild: this.selected
     }
 
   },
   methods: {
-    makeBet(socket) {
-      console.log('Trying to make a bet.');
+    build(socket) {
+      console.log('Trying to build.');
       socket.emit('player-actions', {
-        'make-initial-bet': {
+        'setup-villages-and-roads': {
           pid: socket.id,
-          amount: parseInt(this.bet, 10)
+          nodes: [...this.selectedToBuild.nodes],
+          roads: [...this.selectedToBuild.roads]
         }
       }, response => {
         this.errorMessage = response.status;
         setTimeout(vc => vc.errorMessage = '', 3000, this);
       });
-    },
-    makeMove(socket, move) {
-      console.log('Trying to make a move.');
-      socket.emit('player-actions', {
-        'make-move': {
-          pid: socket.id,
-          move: move
-        }
-      }, response => {
-        this.errorMessage = response.status;
-        setTimeout(vc => vc.errorMessage = '', 3000, this);
-      });
+      this.selectedToBuild.nodes.clear();
+      this.selectedToBuild.roads.clear();
     },
     endturn(socket) {
       console.log('Trying to end my turn.');
@@ -73,6 +72,7 @@ export default {
     // We need to update our mutable copy whenever the board property is updated
     this.localMessage = this.message;
     this.localAction = this.action;
+    this.selectedToBuild = this.selected;
   }
 }
 </script>
