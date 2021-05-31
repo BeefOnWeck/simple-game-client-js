@@ -7,11 +7,26 @@
       {{errorMessage}}
     </div>
   </div>
+  <div>
+    Dice roll: {{roll}}
+  </div>
+  <div>
+    Resources:
+    <div v-for="(value, name) in resources" v-bind:key="name">
+      {{ name }}: {{ value }}
+    </div>
+  </div>
   <form 
     id="build-control"
     v-on:submit.prevent="build(socket)"
   >
     <input type="submit" value="Build Selected">
+  </form>
+  <form 
+    id="roll-control"
+    v-on:submit.prevent="rollDice(socket)"
+  >
+    <input type="submit" value="Roll Dice">
   </form>
   <form 
     id="end-turn-control"
@@ -30,8 +45,12 @@ export default {
   props: [
     'message',
     'action',
-    'selected'
+    'selected',
+    'playerResources',
+    'rollResult',
+    'gamePhase'
   ],
+  emits: ['reset-selected'],
   setup() {
     const socket = inject('socket');
     return {socket};
@@ -41,15 +60,24 @@ export default {
       localAction: this.action,
       localMessage: this.message,
       errorMessage: '',
-      selectedToBuild: this.selected
+      selectedToBuild: this.selected,
+      resources: this.playerResources,
+      roll: this.rollResult,
+      phase: this.gamePhase
     }
 
   },
   methods: {
     build(socket) {
       console.log('Trying to build.');
+      console.log(this.selectedToBuild.nodes);
+      console.log(this.selectedToBuild.roads);
+      let buildAction = this.phase == 'setup' ? 'setup-villages-and-roads'
+        : this.phase == 'play' ? 'build-stuff'
+        : '';
+      console.log(buildAction);
       socket.emit('player-actions', {
-        'setup-villages-and-roads': {
+        [buildAction]: {
           pid: socket.id,
           nodes: [...this.selectedToBuild.nodes],
           roads: [...this.selectedToBuild.roads]
@@ -58,8 +86,18 @@ export default {
         this.errorMessage = response.status;
         setTimeout(vc => vc.errorMessage = '', 3000, this);
       });
-      this.selectedToBuild.nodes.clear();
-      this.selectedToBuild.roads.clear();
+      this.$emit('reset-selected', true);
+    },
+    rollDice(socket) {
+      console.log('Trying to roll the dice.');
+      socket.emit('player-actions', {
+        'roll-dice': {
+          pid: socket.id
+        }
+      }, response => {
+        this.errorMessage = response.status;
+        setTimeout(vc => vc.errorMessage = '', 3000, this);
+      });
     },
     endturn(socket) {
       console.log('Trying to end my turn.');
@@ -73,6 +111,10 @@ export default {
     this.localMessage = this.message;
     this.localAction = this.action;
     this.selectedToBuild = this.selected;
+    console.log(this.selected);
+    this.resources = this.playerResources;
+    this.roll = this.rollResult;
+    this.phase = this.gamePhase;
   }
 }
 </script>

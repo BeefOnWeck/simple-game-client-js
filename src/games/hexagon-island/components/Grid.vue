@@ -6,13 +6,21 @@
         <circle v-for="{x, y, idx} in centroids" :key="idx" :cx=x :cy=y r="15" class="centroid"/>
         <text v-for="{x, y, number, idx} in centroids" :key="idx" :x=x :y=y dy="0.35em" text-anchor="middle" class="number">{{number}}</text> 
         <path v-for="line in lines" :key=line :d=line class="outlines"/>
-        <path v-for="({path, color, opacity}, idx) in roads" :key=idx :d=path stroke-width=5 :stroke=color :stroke-opacity=opacity @click="selectRoad(`${idx}`)"/>
+        <path v-for="({path, color, opacity}, idx) in roads" :key=idx :d=path stroke-width=7 :stroke=color :stroke-opacity=opacity @click="selectRoad(`${idx}`)"/>
         <circle v-for="{x, y, idx} in nodes" :key="idx" :cx=x :cy=y r="3"/>
         <polygon v-for="({x, y, color, opacity}, idx) in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x-10},${y+10})`" :fill=color :fill-opacity=opacity @click="selectNode(`${idx}`)"></polygon>
       </g>
     </svg>
     <div>
-      <Controls v-bind:message="message" v-bind:action="action" v-bind:selected="selected"/>
+      <Controls 
+        v-bind:message="message" 
+        v-bind:action="action" 
+        v-bind:selected="selected"
+        v-bind:playerResources="playerResources"
+        v-bind:rollResult="rollResult"
+        v-bind:gamePhase="gamePhase"
+        @reset-selected="onSelectionReset"
+      />
     </div>
   </div>
 </template>
@@ -28,7 +36,10 @@ export default {
   props: [
     'board',
     'message',
-    'action'
+    'action',
+    'resources',
+    'roll',
+    'phase'
   ],
   data() {
     return {
@@ -43,7 +54,10 @@ export default {
       selected: {
         roads: new Set(),
         nodes: new Set()
-      }
+      },
+      playerResources: this.resources,
+      rollResult: this.roll,
+      gamePhase: this.phase
     }
   },
   methods: {
@@ -54,11 +68,21 @@ export default {
     selectNode(index) {
       console.log(index);
       this.selected.nodes.add(index);
+    },
+    onSelectionReset(reset) {
+      if (reset) {
+        console.log('Reset selections!');
+        this.selected.nodes.clear();
+        this.selected.roads.clear();
+      }
     }
   },
   updated() {
 
     this.villages = this.board.villages;
+    this.playerResources = this.resources;
+    this.rollResult = this.roll;
+    this.gamePhase = this.phase;
 
     // Compute a bounding box that contains all of the nodes
     let nodeBounds = this.nodes.reduce((acc, cv) => {

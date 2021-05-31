@@ -2,7 +2,14 @@
   <div id="app" v-if="isConnected">
     <Login @joined="joinedListener" v-if="!hasJoined"/>
     <div id="game-space" v-if="hasJoined">
-      <Grid v-bind:board="gameBoard" v-bind:message="stateMessage" v-bind:action="currentAction"/>
+      <Grid 
+        v-bind:board="gameBoard" 
+        v-bind:message="stateMessage" 
+        v-bind:action="currentAction"
+        v-bind:resources="playerResources"
+        v-bind:roll="rollResult"
+        v-bind:phase="phase"
+      />
     </div>
   </div>
 </template>
@@ -38,9 +45,12 @@ export default {
       hasJoined: false,
       myTurn: false,
       round: 1,
+      phase: 'boot',
       activePlayerName: '',
       currentAction: '',
       stateMessage: 'Waiting for game to start...',
+      playerResources: {},
+      rollResult: 0,
       gameBoard: {
         centroids: [],
         nodes: [],
@@ -71,6 +81,10 @@ export default {
       vc.currentAction = msg;
       if (vc.currentAction == 'setup-villages-and-roads') {
         actionMessage = 'Place one village and one road';
+      } else if (vc.currentAction == 'roll-dice') {
+        actionMessage = 'Roll the dice';
+      } else if (vc.currentAction == 'build-stuff') {
+        actionMessage = 'Go build stuff!'
       }
       vc.stateMessage = 'It\'s your turn: ' + actionMessage;
     });
@@ -81,10 +95,15 @@ export default {
 
       // Update the round and turn fields
       vc.round = msg.round;
+      vc.phase = msg.phase;
       vc.activePlayerName = msg.players
         .filter(ply => ply.id == msg.activePlayer)
         .map(ply => ply.name)[0];
       vc.currentAction = msg.currentActions[0];
+
+      // Update the player resources and dice result
+      vc.playerResources = msg.state.playerResources;
+      vc.rollResult = msg.state.rollResult;
 
       // Update the board using the state message
       msg.state.centroids.forEach((cent,idx) => {
