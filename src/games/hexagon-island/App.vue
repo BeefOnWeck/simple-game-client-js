@@ -9,6 +9,7 @@
         v-bind:resources="playerResources"
         v-bind:roll="rollResult"
         v-bind:phase="phase"
+        v-bind:myTurn="myTurn"
       />
     </div>
   </div>

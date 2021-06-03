@@ -6,9 +6,9 @@
         <circle v-for="{x, y, idx} in centroids" :key="idx" :cx=x :cy=y r="15" class="centroid"/>
         <text v-for="{x, y, number, idx} in centroids" :key="idx" :x=x :y=y dy="0.35em" text-anchor="middle" class="number">{{number}}</text> 
         <path v-for="line in lines" :key=line :d=line class="outlines"/>
-        <path v-for="({path, color, opacity}, idx) in roads" :key=idx :d=path stroke-width=7 :stroke=color :stroke-opacity=opacity @click="selectRoad(`${idx}`)"/>
+        <path v-for="({path, color, opacity}, idx) in roads" :key=idx :d=path stroke-width=7 :stroke=color :stroke-opacity=opacity @click="selectRoad(`${idx}`)" v-bind:class="{ highlightroad: enableHighlight }"/>
         <circle v-for="{x, y, idx} in nodes" :key="idx" :cx=x :cy=y r="3"/>
-        <polygon v-for="({x, y, color, opacity}, idx) in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x-10},${y+10})`" :fill=color :fill-opacity=opacity @click="selectNode(`${idx}`)"></polygon>
+        <polygon v-for="({x, y, color, opacity}, idx) in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x-10},${y+10})`" :fill=color :fill-opacity=opacity @click="selectNode(`${idx}`)" v-bind:class="{ highlightnode: enableHighlight }"></polygon>
       </g>
     </svg>
     <div>
@@ -39,7 +39,8 @@ export default {
     'action',
     'resources',
     'roll',
-    'phase'
+    'phase',
+    'myTurn'
   ],
   data() {
     return {
@@ -57,7 +58,8 @@ export default {
       },
       playerResources: this.resources,
       rollResult: this.roll,
-      gamePhase: this.phase
+      gamePhase: this.phase,
+      enableHighlight: false
     }
   },
   methods: {
@@ -83,6 +85,8 @@ export default {
     this.playerResources = this.resources;
     this.rollResult = this.roll;
     this.gamePhase = this.phase;
+
+    this.enableHighlight = this.myTurn && (this.action != 'roll-dice');
 
     // Compute a bounding box that contains all of the nodes
     let nodeBounds = this.nodes.reduce((acc, cv) => {
@@ -131,12 +135,6 @@ export default {
 .desert {
   fill: khaki;
 }
-/* .grid svg g { */
-  /* transform: translate(100px, 100px); */
-/* } */
-/* .grid svg g polygon{
-  fill:forestgreen;
-} */
 .outlines{
   stroke: black;
 }
@@ -146,5 +144,11 @@ export default {
 }
 .number {
   font-weight: bold;
+}
+path.highlightroad:hover {
+  stroke-opacity: 1;
+}
+polygon.highlightnode:hover {
+  fill-opacity: 1;
 }
 </style>

@@ -102,7 +102,8 @@ export default {
     endturn(socket) {
       console.log('Trying to end my turn.');
       socket.emit('end-my-turn', {}, response => {
-        console.log(response.status);
+        this.errorMessage = response.status;
+        setTimeout(vc => vc.errorMessage = '', 3000, this);
       });
     }
   },
