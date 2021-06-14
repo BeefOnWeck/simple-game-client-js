@@ -1,14 +1,35 @@
 <template>
   <div class="grid">
     <svg :viewBox=svgViewBox>
-      <g>
-        <polygon v-for="({poly, resource}, idx) in hexagons" :key=idx :points=poly v-bind:class=resource></polygon>
+      <g :key="reRenderKey">
+        <polygon v-for="({poly, resource}, idx) in hexagons" :key=idx 
+          :points=poly 
+          v-bind:class="[resource, { highlightHexagon: enableHexagonHighlight }]"
+          v-on="enableHexagonHighlight ? { click : () => selectHexagon(`${idx}`, socket) } : {}"
+          >
+        </polygon>
         <circle v-for="{x, y, idx} in centroids" :key="idx" :cx=x :cy=y r="15" class="centroid"/>
-        <text v-for="{x, y, number, idx} in centroids" :key="idx" :x=x :y=y dy="0.35em" text-anchor="middle" class="number">{{number}}</text> 
+        <text v-for="{x, y, number, idx} in centroids" :key="idx" 
+          :x=x :y=y dy="0.35em" text-anchor="middle" class="number">
+          {{number}}
+        </text> 
         <path v-for="line in lines" :key=line :d=line class="outlines"/>
-        <path v-for="({path, color, opacity}, idx) in roads" :key=idx :d=path stroke-width=7 :stroke=color :stroke-opacity=opacity @click="selectRoad(`${idx}`)" v-bind:class="{ highlightroad: enableHighlight }"/>
-        <circle v-for="{x, y, idx} in nodes" :key="idx" :cx=x :cy=y r="3"/>
-        <polygon v-for="({x, y, color, opacity}, idx) in villages" :key=idx points="0,0 20,0 20,-15 10,-25 0,-15" :transform="`translate(${x-10},${y+10})`" :fill=color :fill-opacity=opacity @click="selectNode(`${idx}`)" v-bind:class="{ highlightnode: enableHighlight }"></polygon>
+        <path v-for="({path, color, opacity}, idx) in roads" :key=idx 
+          :d=path stroke-width=7 :stroke=color :stroke-opacity=opacity 
+          @click="selectRoad(`${idx}`)" 
+          v-bind:class="[{ highlightroad: enableBuildHighlight }, {selectedroad : selected.roads.has(idx) }]"
+        />
+        <circle v-for="{x, y, idx} in nodes" :key="idx" 
+          :cx=x :cy=y r="3"
+        />
+        <polygon v-for="({x, y, color, opacity}, idx) in villages" :key=idx 
+          points="0,0 20,0 20,-15 10,-25 0,-15" 
+          :transform="`translate(${x-10},${y+10})`" 
+          :fill=color :fill-opacity=opacity 
+          @click="selectNode(`${idx}`)" 
+          v-bind:class="[{ highlightnode: enableBuildHighlight }, {selectednode : selected.nodes.has(idx) }]">
+        </polygon>
+        <rect :x=brigand.x :y=brigand.y width="10" height="50" transform="translate(0,-30)"/>
       </g>
     </svg>
     <div>
@@ -27,6 +48,7 @@
 
 <script>
 import Controls from './Controls.vue'
+import { inject } from 'vue';
 
 export default {
   name: 'Grid',
@@ -42,6 +64,10 @@ export default {
     'phase',
     'myTurn'
   ],
+  setup() {
+    const socket = inject('socket');
+    return {socket};
+  },
   data() {
     return {
       svgViewBox: "0 0 100 100",
@@ -52,6 +78,7 @@ export default {
       roads: this.board.roads,
       lines: this.board.lines,
       villages: this.board.villages,
+      brigand: this.board.brigand,
       selected: {
         roads: new Set(),
         nodes: new Set()
@@ -59,21 +86,34 @@ export default {
       playerResources: this.resources,
       rollResult: this.roll,
       gamePhase: this.phase,
-      enableHighlight: false
+      enableBuildHighlight: false,
+      enableHexagonHighlight: false,
+      reRenderKey: 0
     }
   },
   methods: {
     selectRoad(index) {
-      console.log(index);
-      this.selected.roads.add(index);
+      this.selected.roads.add(parseInt(index));
+      this.reRenderKey += 1;
+      console.log(this.selected.roads);
+      // TODO: Toggle highlighting for selected roads and nodes
     },
     selectNode(index) {
-      console.log(index);
-      this.selected.nodes.add(index);
+      this.reRenderKey += 1;
+      this.selected.nodes.add(parseInt(index));
+    },
+    selectHexagon(index, socket) {
+      socket.emit('player-actions', {
+        'move-brigand': {
+          pid: socket.id,
+          hexInd: index
+        }
+      }, response => {
+        console.log(response.status);
+      });
     },
     onSelectionReset(reset) {
       if (reset) {
-        console.log('Reset selections!');
         this.selected.nodes.clear();
         this.selected.roads.clear();
       }
@@ -82,11 +122,13 @@ export default {
   updated() {
 
     this.villages = this.board.villages;
+    this.brigand = this.board.brigand;
     this.playerResources = this.resources;
     this.rollResult = this.roll;
     this.gamePhase = this.phase;
 
-    this.enableHighlight = this.myTurn && (this.action != 'roll-dice');
+    this.enableBuildHighlight = this.myTurn && (['build-stuff', 'setup-villages-and-roads'].includes(this.action));
+    this.enableHexagonHighlight = this.myTurn && (['move-brigand'].includes(this.action));
 
     // Compute a bounding box that contains all of the nodes
     let nodeBounds = this.nodes.reduce((acc, cv) => {
@@ -124,7 +166,7 @@ export default {
   fill: gray;
 }
 .timber {
-  fill:green;;
+  fill:green;
 }
 .cereal {
   fill: goldenrod;
@@ -148,7 +190,16 @@ export default {
 path.highlightroad:hover {
   stroke-opacity: 1;
 }
+path.selectedroad {
+  stroke-opacity: 1;
+}
 polygon.highlightnode:hover {
   fill-opacity: 1;
+}
+polygon.selectednode {
+  fill-opacity: 1;
+}
+polygon.highlightHexagon:hover {
+  fill: black;
 }
 </style>

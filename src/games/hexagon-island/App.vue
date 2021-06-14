@@ -59,7 +59,8 @@ export default {
         numbers: [],
         roads: [],
         lines: [],
-        villages: []
+        villages: [],
+        brigand: {}
       }
     }
   },
@@ -79,13 +80,15 @@ export default {
       vc.myTurn = true;
       // Message should contain what actions the player needs to take
       let actionMessage = '';
-      vc.currentAction = msg;
+      vc.currentAction = msg[0];
       if (vc.currentAction == 'setup-villages-and-roads') {
         actionMessage = 'Place one village and one road';
       } else if (vc.currentAction == 'roll-dice') {
         actionMessage = 'Roll the dice';
       } else if (vc.currentAction == 'build-stuff') {
-        actionMessage = 'Go build stuff!'
+        actionMessage = 'Go build stuff!';
+      } else if (vc.currentAction == 'move-brigand') {
+        actionMessage = 'Select a hexagon to move the brigand to.';
       }
       vc.stateMessage = 'It\'s your turn: ' + actionMessage;
     });
@@ -93,6 +96,12 @@ export default {
       console.log(msg);
       vc.stateMessage = '';
       vc.gameBoard.villages = [];
+
+      if (msg.activePlayer == vc.myId) {
+        vc.myTurn = true;
+      } else {
+        vc.myTurn = false;
+      }
 
       // Update the round and turn fields
       vc.round = msg.round;
@@ -109,6 +118,9 @@ export default {
       // Update the board using the state message
       msg.state.centroids.forEach((cent,idx) => {
         vc.gameBoard.centroids.splice(idx,1,cent);
+        if (idx == msg.state.brigandIndex) {
+          vc.gameBoard.brigand = {...cent};
+        }
       });
       msg.state.nodes.forEach((node,idx) => {
         vc.gameBoard.nodes.splice(idx,1,node);
