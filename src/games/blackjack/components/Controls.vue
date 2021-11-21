@@ -76,6 +76,9 @@ export default {
         this.errorMessage = response.status;
         setTimeout(vc => vc.errorMessage = '', 3000, this);
       });
+      socket.emit('end-my-turn', {}, response => {
+        console.log(response.status);
+      });
     },
     makeMove(socket, move) {
       console.log('Trying to make a move.');
@@ -87,6 +90,9 @@ export default {
       }, response => {
         this.errorMessage = response.status;
         setTimeout(vc => vc.errorMessage = '', 3000, this);
+      });
+      socket.emit('end-my-turn', {}, response => {
+        console.log(response.status);
       });
     },
     endturn(socket) {
