@@ -135,7 +135,7 @@ export default {
       });
       msg.state.hexagons.forEach((hex,idx) => {
         // SVG polygon defining a hexagon
-        let poly = hex.poly.reduce((acc, cv, ci) => {
+        let poly = hex.vertices.reduce((acc, cv, ci) => {
           return ci<5 ? acc + `${cv.x},${cv.y}, ` : acc + `${cv.x},${cv.y}`;
         }, '');
         vc.gameBoard.hexagons.splice(idx,1,{
