@@ -83,7 +83,7 @@ export default {
       vc.myId = this.id;
       vc.isConnected = true; // We don't render until the socket is connected
     });
-    socket.on('start-your-turn', (msg) => {
+    socket.on('it-is-your-turn', (msg) => {
       vc.myTurn = true;
       // Message should contain what actions the player needs to take
       let actionMessage = msg == 'make-initial-bet' ?
@@ -100,7 +100,7 @@ export default {
       vc.activePlayerName = msg.players
         .filter(ply => ply.id == msg.activePlayer)
         .map(ply => ply.name)[0];
-      vc.currentAction = msg.currentActions[0];
+      vc.currentAction = msg.allowableActions[0];
 
       // Update your funds
       vc.yourFunds = msg.state.playerFunds

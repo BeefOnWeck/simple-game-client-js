@@ -43,7 +43,7 @@ export default {
       console.log('Socket ID:', this.id);
       vc.isConnected = true; // We don't render until the socket is connected
     });
-    socket.on('start-your-turn', () => {
+    socket.on('it-is-your-turn', () => {
       vc.myTurn = true;
       console.log('I am the active player');
     });
