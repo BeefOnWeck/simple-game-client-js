@@ -208,7 +208,9 @@ body {
   font-family: sans-serif;
 }
 #game-space{
-  background-color: #eee;
+  /* background-color: #eee; */
+  background-color: #b0b6ff;
+background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4' viewBox='0 0 4 4'%3E%3Cpath fill='%23001eff' fill-opacity='0.4' d='M1 3h1v1H1V3zm2-2h1v1H3V1z'%3E%3C/path%3E%3C/svg%3E");
   margin: auto;
   width: 50%;
   border: 1px solid #2c3e50;

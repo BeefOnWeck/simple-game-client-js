@@ -29,7 +29,10 @@
           @click="selectNode(`${idx}`)" 
           v-bind:class="[{ highlightnode: enableBuildHighlight }, {selectednode : selected.nodes.has(idx) }]">
         </polygon>
-        <rect :x=brigand.x :y=brigand.y width="10" height="50" transform="translate(0,-30)"/>
+        <path 
+          d="M11 7l1.44 2.16c.31.47 1.01.84 1.57.84H17V8h-3l-1.44-2.16a5.94 5.94 0 0 0-1.4-1.4l-1.32-.88a1.72 1.72 0 0 0-1.7-.04L4 6v5h2V7l2-1-3 14h2l2.35-7.65L11 14v6h2v-8l-2.7-2.7L11 7zm1-3a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" 
+          :transform="`translate(${brigand.x-10},${brigand.y-10}) scale(2)`"
+        />
       </g>
     </svg>
     <div>
@@ -160,22 +163,22 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .block {
-  fill: darkred;
+  fill: rgb(131, 73, 73);
 }
 .rock {
-  fill: gray;
+  fill: rgb(104, 103, 103);
 }
 .timber {
-  fill:green;
+  fill:rgb(74, 110, 74);
 }
 .cereal {
-  fill: goldenrod;
+  fill: rgb(230, 192, 97);
 }
 .fiber {
-  fill: ghostwhite;
+  fill: rgb(232, 232, 238);
 }
 .desert {
-  fill: khaki;
+  fill: rgb(175, 171, 108);
 }
 .outlines{
   stroke: black;
