@@ -100,7 +100,7 @@ export default {
       vc.activePlayerName = msg.players
         .filter(ply => ply.id == msg.activePlayer)
         .map(ply => ply.name)[0];
-      vc.currentAction = msg.allowableActions[0];
+      vc.currentAction = msg.possibleActions[0];
 
       // Update your funds
       vc.yourFunds = msg.state.playerFunds

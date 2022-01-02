@@ -38,7 +38,7 @@
     <input type="submit" value="Double">
   </form>
   <form 
-    id="end-turn-control"
+    id="endTurn-control"
     v-on:submit.prevent="endturn(socket)"
   >
     <input type="submit" value="End Turn">

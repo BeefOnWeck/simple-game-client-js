@@ -29,7 +29,7 @@
     <input type="submit" value="Roll Dice">
   </form>
   <form 
-    id="end-turn-control"
+    id="endTurn-control"
     v-on:submit.prevent="endturn(socket)"
   >
     <input type="submit" value="End Turn">
@@ -72,8 +72,8 @@ export default {
       console.log('Trying to build.');
       console.log(this.selectedToBuild.nodes);
       console.log(this.selectedToBuild.roads);
-      let buildAction = this.phase == 'setup' ? 'setup-villages-and-roads'
-        : this.phase == 'play' ? 'build-stuff'
+      let buildAction = this.phase == 'setup' ? 'setupVillagesAndRoads'
+        : this.phase == 'play' ? 'buildStuff'
         : '';
       console.log(buildAction);
       socket.emit('player-actions', {
@@ -91,7 +91,7 @@ export default {
     rollDice(socket) {
       console.log('Trying to roll the dice.');
       socket.emit('player-actions', {
-        'roll-dice': {
+        'rollDice': {
           pid: socket.id
         }
       }, response => {

@@ -104,7 +104,7 @@ export default {
     },
     selectHexagon(index, socket) {
       socket.emit('player-actions', {
-        'move-brigand': {
+        'moveBrigand': {
           pid: socket.id,
           hexInd: index
         }
@@ -127,8 +127,8 @@ export default {
     this.rollResult = this.roll;
     this.gamePhase = this.phase;
 
-    this.enableBuildHighlight = this.myTurn && (['build-stuff', 'setup-villages-and-roads'].includes(this.action));
-    this.enableHexagonHighlight = this.myTurn && (['move-brigand'].includes(this.action));
+    this.enableBuildHighlight = this.myTurn && (this.action.includes('buildStuff') || this.action.includes('setupVillagesAndRoads'));
+    this.enableHexagonHighlight = this.myTurn && this.action.includes('moveBrigand');
 
     // Compute a bounding box that contains all of the nodes
     let nodeBounds = this.nodes.reduce((acc, cv) => {
