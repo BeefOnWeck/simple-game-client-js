@@ -151,10 +151,10 @@ export default {
 
     // Set the SVG viewBox, with a 10% margin on the borders
     this.svgViewBox = "" +
-      (nodeBounds[0]-widthX/10) + " " +
-      (nodeBounds[2]-widthY/10) + " " +
-      widthX*1.2 + " " +
-      widthY*1.2;
+      (nodeBounds[0]-widthX/20) + " " +
+      (nodeBounds[2]-widthY/20) + " " +
+      widthX*1.1 + " " +
+      widthY*1.1;
 
   }
 }

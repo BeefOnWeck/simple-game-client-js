@@ -1,39 +1,33 @@
 <template>
-  <div class="controls-and-status" id="message-bar">
-    <div v-bind:class="{'status-message':localMessage!=''}">
-      {{localMessage}}
-    </div>
+  <div class="controls" id="message-bar">
     <div v-bind:class="{'error-message':errorMessage!=''}">
       {{errorMessage}}
-    </div>
-  </div>
-  <div>
-    Dice roll: {{roll}}
-  </div>
-  <div>
-    Resources:
-    <div v-for="(value, name) in resources" v-bind:key="name">
-      {{ name }}: {{ value }}
     </div>
   </div>
   <form 
     id="build-control"
     v-on:submit.prevent="build(socket)"
+    class="action-button"
   >
     <input type="submit" value="Build Selected">
   </form>
   <form 
     id="roll-control"
     v-on:submit.prevent="rollDice(socket)"
+    class="action-button"
   >
     <input type="submit" value="Roll Dice">
   </form>
   <form 
     id="endTurn-control"
     v-on:submit.prevent="endturn(socket)"
+    class="action-button"
   >
     <input type="submit" value="End Turn">
   </form>
+  <div id="dice-roll">
+    Dice roll: {{roll}}
+  </div>
 </template>
 
 <script>
@@ -135,8 +129,15 @@ export default {
 .status-message {
   background-color: lightgreen;
 }
-.controls-and-status {
+.controls {
   padding-top: 5px;
   padding-bottom: 5px;
+}
+.action-button {
+  display: inline-block;
+  margin: 5px;
+}
+.action-button > input{
+  font-size: larger;
 }
 </style>
