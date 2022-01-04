@@ -25,9 +25,6 @@
   >
     <input type="submit" value="End Turn">
   </form>
-  <div id="dice-roll">
-    Dice roll: {{roll}}
-  </div>
 </template>
 
 <script>

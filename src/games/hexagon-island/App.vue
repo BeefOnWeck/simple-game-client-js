@@ -195,8 +195,8 @@ export default {
     });
 
   },
-  mounted() {
-    // TODO: Consider removing
+  updated() {
+    // this.rollResult = this.roll;
   }
 }
 

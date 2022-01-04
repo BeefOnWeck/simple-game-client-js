@@ -13,7 +13,7 @@
     </div>
   </div>
   <div id="dice-roll">
-    Dice roll: {{roll}}
+    Dice roll: {{rollResult}}
   </div>
   
 </template>
@@ -26,11 +26,9 @@ export default {
   components: {},
   props: [
     'message',
-    'action',
-    'selected',
     'resources',
-    'rollResult',
-    'gamePhase'
+    'roll',
+    'phase'
   ],
   emits: ['reset-selected'],
   setup() {
@@ -41,8 +39,8 @@ export default {
     return {
       localMessage: this.message,
       localResources: this.resources,
-      roll: this.rollResult,
-      phase: this.gamePhase
+      rollResult: this.roll,
+      gamePhase: this.phase
     }
 
   },
@@ -50,8 +48,8 @@ export default {
     // We need to update our mutable copy whenever the board property is updated
     this.localMessage = this.message;
     this.localResources = this.resources;
-    this.roll = this.rollResult;
-    this.phase = this.gamePhase;
+    this.rollResult = this.roll;
+    this.gamePhase = this.phase;
   }
 }
 </script>
@@ -60,17 +58,23 @@ export default {
 <style scoped>
 .resource {
   display: inline-block;
-  margin: 5px;
+  margin: 3px;
+  padding: 5px;
   border: black;
+  font-weight: bolder;
+  border-radius: 5px;
 }
 .block {
   background-color: rgb(131, 73, 73);
+  color: whitesmoke;
 }
 .rock {
   background-color: rgb(104, 103, 103);
+  color: whitesmoke;
 }
 .timber {
   background-color:rgb(74, 110, 74);
+  color: whitesmoke;
 }
 .cereal {
   background-color: rgb(230, 192, 97);
