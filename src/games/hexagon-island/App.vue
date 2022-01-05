@@ -7,6 +7,7 @@
         v-bind:resources="playerResources"
         v-bind:roll="rollResult"
         v-bind:phase="phase"
+        v-bind:activePlayer="activePlayerName"
       />
       <Grid 
         v-bind:board="gameBoard" 
@@ -91,18 +92,18 @@ export default {
       console.log('msg:',msg);
       vc.possibleActions = msg;
       if (vc.possibleActions.includes('setupVillagesAndRoads')) {
-        actionMessage += '- Place one village and one road \n';
+        actionMessage += 'Place one village and one road.';
       }
       if (vc.possibleActions.includes('rollDice')) {
-        actionMessage += '- Roll the dice \n';
+        actionMessage += 'Roll the dice. ';
       } 
       if (vc.possibleActions.includes('buildStuff')) {
-        actionMessage += '- Go build stuff! \n';
+        actionMessage += 'Go build stuff. ';
       } 
       if (vc.possibleActions.includes('moveBrigand')) {
-        actionMessage += '- Select a hexagon to move the brigand to. \n';
+        actionMessage += 'Move the brigand. ';
       }
-      vc.stateMessage = 'It\'s your turn, take an action: \n' + actionMessage;
+      vc.stateMessage = 'It\'s your turn: ' + actionMessage;
     });
     socket.on('game-state', (msg) => {
       console.log(msg);

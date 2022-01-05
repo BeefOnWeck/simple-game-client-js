@@ -1,5 +1,5 @@
 <template>
-  <div class="controls" id="message-bar">
+  <div class="controls" id="error-bar">
     <div v-bind:class="{'error-message':errorMessage!=''}">
       {{errorMessage}}
     </div>

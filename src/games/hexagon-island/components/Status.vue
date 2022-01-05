@@ -8,14 +8,13 @@
     <div v-bind:class="{'status-message':localMessage!=''}">
       {{localMessage}}
     </div>
-    <div v-bind:class="{'error-message':errorMessage!=''}">
-      {{errorMessage}}
-    </div>
   </div>
   <div id="dice-roll">
     Dice roll: {{rollResult}}
   </div>
-  
+  <div>
+    Active player: {{activePlayerName}}
+  </div>
 </template>
 
 <script>
@@ -28,7 +27,8 @@ export default {
     'message',
     'resources',
     'roll',
-    'phase'
+    'phase',
+    'activePlayer'
   ],
   emits: ['reset-selected'],
   setup() {
@@ -40,7 +40,8 @@ export default {
       localMessage: this.message,
       localResources: this.resources,
       rollResult: this.roll,
-      gamePhase: this.phase
+      gamePhase: this.phase,
+      activePlayerName: this.activePlayer
     }
 
   },
@@ -50,6 +51,7 @@ export default {
     this.localResources = this.resources;
     this.rollResult = this.roll;
     this.gamePhase = this.phase;
+    this.activePlayerName = this.activePlayer;
   }
 }
 </script>
@@ -63,6 +65,7 @@ export default {
   border: black;
   font-weight: bolder;
   border-radius: 5px;
+  font-size: 20px;
 }
 .block {
   background-color: rgb(131, 73, 73);
@@ -87,7 +90,9 @@ export default {
   padding-bottom: 5px;
 }
 #message-bar > div {
-  height: 22px;
+  min-height: 24px;
+  font-size: 20px;
+  font-weight: bold;
 }
 .status-message {
   background-color: lightgreen;
@@ -95,5 +100,9 @@ export default {
 .status {
   padding-top: 5px;
   padding-bottom: 5px;
+}
+#dice-roll {
+  font-size: 20px;
+  font-weight: bolder;
 }
 </style>
