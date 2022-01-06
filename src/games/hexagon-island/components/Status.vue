@@ -4,16 +4,18 @@
       {{ name }}: {{ value }}
     </div>
   </div>
+  <div class="status-fields">
+    <div id="dice-roll">
+      Dice: {{rollResult}}
+    </div>
+    <div id="active-player">
+      Turn: {{activePlayerName}}
+    </div>
+  </div>
   <div class="status" id="message-bar">
     <div v-bind:class="{'status-message':localMessage!=''}">
       {{localMessage}}
     </div>
-  </div>
-  <div id="dice-roll">
-    Dice roll: {{rollResult}}
-  </div>
-  <div>
-    Active player: {{activePlayerName}}
   </div>
 </template>
 
@@ -86,23 +88,34 @@ export default {
   background-color: rgb(232, 232, 238);
 }
 #message-bar {
-  padding-top: 20px;
+  padding-top: 10px;
   padding-bottom: 5px;
 }
 #message-bar > div {
-  min-height: 24px;
+  min-height: 27px;
   font-size: 20px;
   font-weight: bold;
+  border: thin;
+  border-style: solid;
 }
 .status-message {
   background-color: lightgreen;
 }
-.status {
-  padding-top: 5px;
-  padding-bottom: 5px;
+.status-fields {
+  background: #cccfea;
+  margin-top: 10px;
+  border: thin;
+  border-style: solid;
 }
-#dice-roll {
+.status-fields > div {
   font-size: 20px;
   font-weight: bolder;
+  display: inline-block;
+}
+#dice-roll {
+  margin-right: 20px;
+}
+#active-player {
+  margin-left: 20px;
 }
 </style>

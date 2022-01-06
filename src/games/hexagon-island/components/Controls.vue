@@ -123,12 +123,16 @@ export default {
 .error-message {
   background-color: lightpink;
 }
-.status-message {
-  background-color: lightgreen;
-}
 .controls {
   padding-top: 5px;
   padding-bottom: 5px;
+}
+.controls > div {
+  font-size: 20px;
+  font-weight: bolder;
+  min-height: 27px;
+  border: thin;
+  border-style: solid;
 }
 .action-button {
   display: inline-block;

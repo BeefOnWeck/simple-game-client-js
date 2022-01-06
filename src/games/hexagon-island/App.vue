@@ -103,7 +103,7 @@ export default {
       if (vc.possibleActions.includes('moveBrigand')) {
         actionMessage += 'Move the brigand. ';
       }
-      vc.stateMessage = 'It\'s your turn: ' + actionMessage;
+      vc.stateMessage = actionMessage;
     });
     socket.on('game-state', (msg) => {
       console.log(msg);
