@@ -70,15 +70,15 @@ export default {
   font-size: 20px;
 }
 .block {
-  background-color: rgb(131, 73, 73);
+  background-color: #a56666;
   color: whitesmoke;
 }
 .rock {
-  background-color: rgb(104, 103, 103);
+  background-color: #8d8c8c;
   color: whitesmoke;
 }
 .timber {
-  background-color:rgb(74, 110, 74);
+  background-color:#618961;
   color: whitesmoke;
 }
 .cereal {

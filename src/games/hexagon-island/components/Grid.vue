@@ -15,20 +15,30 @@
         </text> 
         <path v-for="line in lines" :key=line :d=line class="outlines"/>
         <path v-for="({path, color, opacity}, idx) in roads" :key=idx 
-          :d=path stroke-width=7 :stroke=color :stroke-opacity=opacity 
+          :d=path stroke-width=12 :stroke=color :stroke-opacity=opacity 
           @click="selectRoad(`${idx}`)" 
           v-bind:class="[{ highlightroad: enableBuildHighlight }, {selectedroad : selected.roads.has(idx) }]"
         />
         <circle v-for="{x, y, idx} in nodes" :key="idx" 
           :cx=x :cy=y r="3"
         />
-        <polygon v-for="({x, y, color, opacity}, idx) in villages" :key=idx 
+        <path v-for="({x, y, color, opacity}, idx) in villages" :key=idx
+          d="M8 20H3V10H0L10 0l10 10h-3v10h-5v-6H8v6z"
+          :transform="`translate(${x-20},${y-25}) scale(2)`"
+          :stroke=color
+          :fill=color
+          :stroke-opacity=opacity
+          :fill-opacity=opacity
+          @click="selectNode(`${idx}`)" 
+          v-bind:class="[{ highlightnode: enableBuildHighlight }, {selectednode : selected.nodes.has(idx) }]"
+        />
+        <!-- <polygon v-for="({x, y, color, opacity}, idx) in villages" :key=idx 
           points="0,0 20,0 20,-15 10,-25 0,-15" 
-          :transform="`translate(${x-10},${y+10})`" 
+          :transform="`translate(${x-17},${y+17}) scale(1.7)`" 
           :fill=color :fill-opacity=opacity 
           @click="selectNode(`${idx}`)" 
           v-bind:class="[{ highlightnode: enableBuildHighlight }, {selectednode : selected.nodes.has(idx) }]">
-        </polygon>
+        </polygon> -->
         <path 
           d="M11 7l1.44 2.16c.31.47 1.01.84 1.57.84H17V8h-3l-1.44-2.16a5.94 5.94 0 0 0-1.4-1.4l-1.32-.88a1.72 1.72 0 0 0-1.7-.04L4 6v5h2V7l2-1-3 14h2l2.35-7.65L11 14v6h2v-8l-2.7-2.7L11 7zm1-3a2 2 0 1 0 0-4 2 2 0 0 0 0 4z" 
           :transform="`translate(${brigand.x-10},${brigand.y-10}) scale(2)`"
@@ -163,13 +173,13 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .block {
-  fill: rgb(131, 73, 73);
+  fill: #a56666;
 }
 .rock {
-  fill: rgb(104, 103, 103);
+  fill: #8d8c8c;
 }
 .timber {
-  fill:rgb(74, 110, 74);
+  fill:#618961;
 }
 .cereal {
   fill: rgb(230, 192, 97);
@@ -197,11 +207,13 @@ path.highlightroad:hover {
 path.selectedroad {
   stroke-opacity: 1;
 }
-polygon.highlightnode:hover {
+path.highlightnode:hover {
   fill-opacity: 1;
+  stroke-opacity: 1;
 }
-polygon.selectednode {
+path.selectednode {
   fill-opacity: 1;
+  stroke-opacity: 1;
 }
 polygon.highlightHexagon:hover {
   fill: black;
