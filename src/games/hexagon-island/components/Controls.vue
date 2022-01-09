@@ -5,19 +5,32 @@
     </div>
   </div>
   <form 
-    id="build-control"
-    v-on:submit.prevent="build(socket)"
-    class="action-button"
-  >
-    <input type="submit" value="Build Selected">
-  </form>
-  <form 
     id="roll-control"
     v-on:submit.prevent="rollDice(socket)"
     class="action-button"
   >
     <input type="submit" value="Roll Dice">
   </form>
+  <form 
+    id="build-control"
+    v-on:submit.prevent="build(socket)"
+    class="action-button"
+  >
+    <input type="submit" value="Build Selected">
+  </form>
+  <button
+    id="trade-button"
+    type="button"
+    class="btn"
+    @click="showModal"
+  >
+    Trade
+  </button>
+  <Trade
+    v-show="isModalVisible"
+    @close="closeModal"
+    @error="tradingError"
+  />
   <form 
     id="endTurn-control"
     v-on:submit.prevent="endturn(socket)"
@@ -28,11 +41,12 @@
 </template>
 
 <script>
+import Trade from './Trade.vue';
 import { inject } from 'vue';
 
 export default {
   name: 'Controls',
-  components: {},
+  components: {Trade},
   props: [
     'message',
     'action',
@@ -54,7 +68,8 @@ export default {
       selectedToBuild: this.selected,
       resources: this.playerResources,
       roll: this.rollResult,
-      phase: this.gamePhase
+      phase: this.gamePhase,
+      isModalVisible: false,
     }
 
   },
@@ -89,6 +104,16 @@ export default {
         this.errorMessage = response.status;
         setTimeout(vc => vc.errorMessage = '', 3000, this);
       });
+    },
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+    tradingError() {
+      this.errorMessage = 'Invalid trade';
+      setTimeout(vc => vc.errorMessage = '', 3000, this);
     },
     endturn(socket) {
       console.log('Trying to end my turn.');
@@ -140,5 +165,8 @@ export default {
 }
 .action-button > input{
   font-size: larger;
+}
+#trade-button {
+  font-size: 20px;
 }
 </style>

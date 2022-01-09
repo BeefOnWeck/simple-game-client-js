@@ -8,7 +8,7 @@
           v-on="enableHexagonHighlight ? { click : () => selectHexagon(`${idx}`, socket) } : {}"
           >
         </polygon>
-        <circle v-for="{x, y, idx} in centroids" :key="idx" :cx=x :cy=y r="20" class="centroid"/>
+        <circle v-for="{x, y, idx} in centroids" :key="idx" :cx=x :cy=y r="27" class="centroid"/>
         <text v-for="{x, y, number, idx} in centroids" :key="idx" 
           :x=x :y=y dy="0.35em" text-anchor="middle" class="number">
           {{number}}
@@ -199,7 +199,7 @@ export default {
 }
 .number {
   font-weight: bold;
-  font-size: 24px;
+  font-size: 32px;
 }
 path.highlightroad:hover {
   stroke-opacity: 1;
