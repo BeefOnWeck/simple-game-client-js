@@ -128,7 +128,6 @@ export default {
     this.localMessage = this.message;
     this.localAction = this.action;
     this.selectedToBuild = this.selected;
-    console.log(this.selected);
     this.resources = this.playerResources;
     this.roll = this.rollResult;
     this.phase = this.gamePhase;

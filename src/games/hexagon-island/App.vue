@@ -91,7 +91,7 @@ export default {
       vc.myTurn = true;
       // Message should contain what actions the player needs to take
       let actionMessage = '';
-      console.log('msg:',msg);
+      console.log('Action message:',msg);
       vc.possibleActions = msg;
       if (vc.possibleActions.includes('setupVillagesAndRoads')) {
         actionMessage += 'Place one village and one road.';
@@ -108,8 +108,15 @@ export default {
       vc.stateMessage = actionMessage;
     });
     socket.on('game-state', (msg) => {
-      console.log(msg);
-      vc.stateMessage = '';
+      console.log('State message:', msg);
+      if (msg?.phase == 'end') {
+        const winningPlayer = msg.players
+          .filter(ply => ply.id == msg.theWinner)
+          .map(ply => ply.name)[0];
+        vc.stateMessage = 'Game Over: Winner is ' + winningPlayer + '.';
+      } else {
+        vc.stateMessage = '';
+      }
       vc.gameBoard.villages = [];
 
       if (msg.activePlayer == vc.myId) {
