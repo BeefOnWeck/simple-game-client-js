@@ -36,7 +36,9 @@ import Controls from './components/Controls.vue'
 import { provide } from 'vue'
 import { io } from 'socket.io-client'
 
-const socket = io('http://localhost:3000');
+const socket = io(process.env.VUE_APP_SERVER_ORIGIN, {
+  transports: ['websocket']
+});
 
 export default {
   name: 'Blackjack',
