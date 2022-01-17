@@ -84,6 +84,7 @@ export default {
   },
   created() {
     let vc = this;
+    document.cookie = 'myName=;';
     socket.on('connect', function() {
       vc.myId = this.id;
       vc.isConnected = true; // We don't render until the socket is connected
