@@ -106,14 +106,22 @@ export default {
   },
   methods: {
     selectRoad(index) {
-      this.selected.roads.add(parseInt(index));
       this.reRenderKey += 1;
-      console.log(this.selected.roads);
-      // TODO: Toggle highlighting for selected roads and nodes
+      let indexInt = parseInt(index);
+      if (this.selected.roads.has(indexInt)) {
+        this.selected.roads.delete(indexInt);
+      } else {
+        this.selected.roads.add(indexInt);
+      }
     },
     selectNode(index) {
       this.reRenderKey += 1;
-      this.selected.nodes.add(parseInt(index));
+      let indexInt = parseInt(index);
+      if (this.selected.nodes.has(indexInt)) {
+        this.selected.nodes.delete(indexInt);
+      } else {
+        this.selected.nodes.add(indexInt);
+      }
     },
     selectHexagon(index, socket) {
       socket.emit('player-actions', {
