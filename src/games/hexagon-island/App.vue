@@ -45,7 +45,6 @@ export default {
     joinedListener(e) {
       if (e.status == 'You have been added.') {
         this.myName = e.name;
-        // document.cookie = `myName=${e.name};`;
         this.hasJoined = true;
       }
     }
@@ -84,15 +83,10 @@ export default {
   },
   created() {
     let vc = this;
-    // document.cookie = 'myName=;';
     socket.on('connect', function() {
       vc.myId = this.id;
       vc.isConnected = true; // We don't render until the socket is connected
-      // const myNameCookie = document.cookie
-      //   .split('; ')
-      //   .find(row => row.startsWith('myName='));
       if (vc.myName) {
-        // const myName = myNameCookie.split('=')[1];
         socket.emit('reconnect-user-name', vc.myName, response => {
           console.log(response.status);
           console.log(vc.myName);
