@@ -241,5 +241,6 @@ body {
   max-width: 800px;
   border: 1px solid #2c3e50;
   padding: 10px;
+  padding-bottom: 50px;
 }
 </style>

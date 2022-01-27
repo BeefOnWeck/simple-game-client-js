@@ -234,10 +234,10 @@ path.selectednode {
 polygon.highlightHexagon:hover {
   fill: black;
 }
-/* #controls {
+#controls {
   position: fixed;
   bottom: 0px;
   width: 95%;
   max-width: 800px;
-} */
+}
 </style>

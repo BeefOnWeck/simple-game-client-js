@@ -1,6 +1,9 @@
 <template>
   <div class="controls" id="error-bar">
-    <div v-bind:class="{'error-message':errorMessage!=''}">
+    <div v-if="errorMessage==''" v-bind:class="{'status-message':localMessage!=''}">
+      {{localMessage}}
+    </div>
+    <div v-if="errorMessage!=''" v-bind:class="{'error-message':errorMessage!=''}">
       {{errorMessage}}
     </div>
   </div>
@@ -143,6 +146,9 @@ export default {
 }
 #message-bar > div {
   height: 22px;
+}
+.status-message {
+  background-color: lightgreen;
 }
 .error-message {
   background-color: lightpink;
