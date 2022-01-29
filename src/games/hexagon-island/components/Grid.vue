@@ -236,7 +236,7 @@ polygon.highlightHexagon:hover {
 }
 #controls {
   position: fixed;
-  bottom: 0px;
+  bottom: 5px;
   width: 95%;
   max-width: 800px;
 }
