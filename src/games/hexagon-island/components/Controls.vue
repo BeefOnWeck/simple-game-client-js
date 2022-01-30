@@ -114,8 +114,8 @@ export default {
     closeModal() {
       this.isModalVisible = false;
     },
-    tradingError() {
-      this.errorMessage = 'Invalid trade';
+    tradingError(msg) {
+      this.errorMessage = msg;
       setTimeout(vc => vc.errorMessage = '', 3000, this);
     },
     endturn(socket) {

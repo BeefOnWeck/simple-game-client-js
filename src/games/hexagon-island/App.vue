@@ -97,20 +97,30 @@ export default {
     socket.on('it-is-your-turn', (msg) => {
       vc.myTurn = true;
       // Message should contain what actions the player needs to take
-      let actionMessage = '';
+      let actionMessage = 'Actions you can take:';
       console.log('Action message:',msg);
       vc.possibleActions = msg;
       if (vc.possibleActions.includes('setupVillagesAndRoads')) {
-        actionMessage += 'Place one village and one road.';
+        actionMessage = 'Place one village and one road.';
       }
       if (vc.possibleActions.includes('rollDice')) {
-        actionMessage += 'Roll the dice. ';
-      } 
-      if (vc.possibleActions.includes('buildStuff')) {
-        actionMessage += 'Go build stuff. ';
+        actionMessage = 'Roll the dice.';
       } 
       if (vc.possibleActions.includes('moveBrigand')) {
-        actionMessage += 'Move the brigand. ';
+        actionMessage = 'Move the brigand.';
+      }
+      if (vc.possibleActions.includes('buildStuff')) {
+        actionMessage += ' Build,';
+      }
+      if (vc.possibleActions.includes('trade')) {
+        actionMessage += ' Trade,';
+      }
+      if (vc.possibleActions.includes('endTurn')) {
+        actionMessage += ' End Turn,';
+      }
+      // Change any trailing commas to a period.
+      if (actionMessage.slice(-1) == ',') {
+        actionMessage = actionMessage.slice(0,actionMessage.length-1) + '.';
       }
       vc.stateMessage = actionMessage;
     });

@@ -88,8 +88,7 @@
             want: this.trade.want
           }
         }, response => {
-          console.log(response);
-          this.$emit('error');
+          this.$emit('error', response.status);
         });
         this.trade.have = '';
         this.trade.want = '';
