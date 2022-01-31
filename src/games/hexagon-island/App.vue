@@ -101,7 +101,7 @@ export default {
       console.log('Action message:',msg);
       vc.possibleActions = msg;
       if (vc.possibleActions.includes('setupVillagesAndRoads')) {
-        actionMessage = 'Place one village and one road.';
+        actionMessage = 'Select one village and one road and hit Build Selected';
       }
       if (vc.possibleActions.includes('rollDice')) {
         actionMessage = 'Roll the dice.';
