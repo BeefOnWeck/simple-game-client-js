@@ -7,24 +7,26 @@
       {{errorMessage}}
     </div>
   </div>
-  <form 
-    id="roll-control"
-    v-on:submit.prevent="rollDice(socket)"
+  <button
+    id="roll-button"
+    type="button"
     class="action-button"
+    @click="rollDice(socket)"
   >
-    <input type="submit" value="Roll Dice">
-  </form>
-  <form 
-    id="build-control"
-    v-on:submit.prevent="build(socket)"
+    Roll Dice
+  </button>
+  <button
+    id="build-button"
+    type="button"
     class="action-button"
+    @click="build(socket)"
   >
-    <input type="submit" value="Build Selected">
-  </form>
+    Build Selected
+  </button>
   <button
     id="trade-button"
     type="button"
-    class="btn"
+    class="action-button"
     @click="showModal"
   >
     Trade
@@ -34,13 +36,14 @@
     @close="closeModal"
     @error="tradingError"
   />
-  <form 
-    id="endTurn-control"
-    v-on:submit.prevent="endturn(socket)"
+  <button
+    id="end-button"
+    type="button"
     class="action-button"
+    @click="endturn(socket)"
   >
-    <input type="submit" value="End Turn">
-  </form>
+    End Turn
+  </button>
 </template>
 
 <script>
@@ -171,7 +174,7 @@ export default {
 .action-button > input{
   font-size: larger;
 }
-#trade-button {
+.action-button {
   font-size: 20px;
 }
 </style>
