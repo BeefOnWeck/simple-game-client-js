@@ -47,6 +47,10 @@ export default {
         this.myName = e.name;
         this.hasJoined = true;
       }
+    },
+    preventNavigation(e) {
+      e.preventDefault();
+      e.returnValue = '';
     }
   },
   data() {
@@ -76,7 +80,7 @@ export default {
     }
   },
   setup() {
-    // Injecting child components with the socket
+    // Provide child components with the socket.
     // NOTE: Child components can use and modify the socket, but their changes
     // won't be reflected here.
     provide('socket', socket);
@@ -224,7 +228,13 @@ export default {
   },
   updated() {
     // this.rollResult = this.roll;
-  }
+  },
+  beforeMount() {
+    window.addEventListener('beforeunload', this.preventNavigation, {passive: false});
+  },
+  beforeUnmount() {
+    window.removeEventListener('beforeunload', this.preventNavigation, {passive:false});
+  },
 }
 
 </script>

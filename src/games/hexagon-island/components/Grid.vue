@@ -176,11 +176,10 @@ export default {
     widthY = widthY > 0 ? widthY : 100;
 
     // Set the SVG viewBox, with a 10% margin on the borders
-    this.svgViewBox = "" +
-      (nodeBounds[0]-widthX/20) + " " +
-      (nodeBounds[2]-widthY/20) + " " +
-      widthX*1.1 + " " +
-      widthY*1.1;
+    this.svgViewBox = Math.round(nodeBounds[0]-widthX/20).toString() + " " +
+      Math.round(nodeBounds[2]-widthY/20).toString() + " " +
+      Math.round(widthX*1.1).toString() + " " +
+      Math.round(widthY*1.1).toString();
 
   }
 }
