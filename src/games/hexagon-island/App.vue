@@ -47,10 +47,6 @@ export default {
         this.myName = e.name;
         this.hasJoined = true;
       }
-    },
-    preventNavigation(e) {
-      e.preventDefault();
-      e.returnValue = '';
     }
   },
   data() {
@@ -228,13 +224,7 @@ export default {
   },
   updated() {
     // this.rollResult = this.roll;
-  },
-  beforeMount() {
-    window.addEventListener('beforeunload', this.preventNavigation, {passive: false});
-  },
-  beforeUnmount() {
-    window.removeEventListener('beforeunload', this.preventNavigation, {passive:false});
-  },
+  }
 }
 
 </script>
