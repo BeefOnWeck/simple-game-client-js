@@ -12,11 +12,6 @@
       Turn: {{activePlayerName}}
     </div>
   </div>
-  <!-- <div class="status" id="message-bar">
-    <div v-bind:class="{'status-message':localMessage!=''}">
-      {{localMessage}}
-    </div>
-  </div> -->
 </template>
 
 <script>

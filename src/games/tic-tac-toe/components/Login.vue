@@ -23,19 +23,26 @@ export default {
   },
   data() {
     return {
-      name: null
+      name: window.localStorage.getItem('sgc-name') ?? null
     };
   },
   methods: {
     login(socket) { 
-      console.log('Sending user name:', this.name);
       let vc = this;
-      socket.emit('send-user-name', this.name, response => {
-        console.log(response.status);
-        vc.$emit('joined', {
-          name: vc.name,
-          status: response.status
-        });
+      socket.emit('reconnect-user-name', vc.name, response => {
+        if (response.status == 'Cannot reconnect; no matching user.') {
+          socket.emit('send-user-name', vc.name, response => {
+            vc.$emit('joined', {
+              name: vc.name,
+              status: response.status
+            });
+          });
+        } else {
+          vc.$emit('joined', {
+            name: vc.name,
+            status: response.status
+          });
+        }
       });
     }
   }
